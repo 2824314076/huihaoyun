@@ -1,259 +1,175 @@
 <template>
   <div class="home">
-    <vue-particles
-
-        color="#dedede"
-
-        :particleOpacity="0.7"
-
-        :particlesNumber="50"
-
-        shapeType="star"
-
-        :particleSize="4"
-
-        linesColor="#FFFFFF"
-
-        :linesWidth="2"
-
-        :lineLinked="true"
-
-        :lineOpacity="0.4"
-
-        :linesDistance="150"
-
-        :moveSpeed="3"
-
-        :hoverEffect="true"
-
-        hoverMode="grab"
-
-        :clickEffect="true"
-
-        clickMode="push" class="cash"
-
-    >
-    </vue-particles>
-    <!--  按钮  -->
-    <div class="head">
-      <div class="left">
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
+    <div>
+      <div class="flex between title">
+        <!--        <div>{{ NewTime | formatDate }}</div>-->
+        <div>2022-8-20 星期二 13:43:10</div>
+        <h2>惠浩运网络货运平台可视化大屏</h2>
+        <div>2022-8-20 星期二 13:43:10</div>
+        <!--        <div style="text-align: right;">{{ NewTime | formatDate }}</div>-->
       </div>
-      <div>
-        <h1> 物流大数据监管平台</h1>
-      </div>
-      <div class="right">
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
-      </div>
-    </div>
-    <div class="summary">
-      <!--  当天车辆报警汇总  -->
-      <div class="operate">
-        <div class="border">
-          <div class="auto">
-            <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
+      <div class="flex between ">
+        <div class="ranking">
+          <div class="row">
+            <div class="flex">
+              <div class="font">货主排名top10</div>
+              <div class="flex mar button" v-for="(item,index) in ranking" :key="index">
+                <el-button :class="item.origin" @click="ownercargo(index)">{{ item.name }}</el-button>
               </div>
-              <div>企业总数</div>
             </div>
-            <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
+            <div id="consignor" style="width: 100%;height: 300px;"></div>
+          </div>
+          <div class="spacing">
+            <div class="font">线路运距占比</div>
+            <div id="line" style="width: 100%;height: 300px;"></div>
+          </div>
+          <div class="carrier">
+            <div class=" flex">
+              <div class="font">承运商排名top10</div>
+              <div class="flex mar button" v-for="(item,index) in acceptcarriage" :key="index">
+                <el-button :class="item.green" @click="undertaketransport(index)">{{ item.name }}</el-button>
               </div>
-              <div>企业总数</div>
             </div>
-            <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
-              </div>
-              <div>企业总数</div>
+            <div>
+              <ul v-for="(item,index) in 10" class="flex" style="list-style-type:none;padding: 0;margin:0 0 10px 0;">
+                <li style="width: 30px;height:30px;text-align: center;background:orange;">
+                  <div style="border-radius: 50%;background: red;width: 20px;line-height: 20px;margin-top:15%;">01</div>
+                </li>
+                <li style="width: 300px;line-height:30px;background:orange;">北京中兴路车联网有限公司</li>
+                <li style="line-height:30px;background:orange;">5000</li>
+              </ul>
             </div>
           </div>
         </div>
-        <div class="vehicles flex">
-          <div class="online">
-            <table cellspacing="0" border="1">
+        <div class="statistics">
+          <div>
+            <div style="background: #42b983;padding-left: 1%;">统计分析</div>
+            <div>
+              <div class="flex wrap" style="width: 100%;">
+                <div style="width: 50%;text-align: center;" v-for="(item,index) in amountnum" :key="index">
+                  <div>{{ item.title }}</div>
+                  <div class="flex">
+                    <div class="flex">
+                      <div id="growth" style="margin-right: 10%;background: red;" v-for="(ite,ind) in item.num"
+                           :key="ind">
+                        {{ ite }}
+                      </div>
+                      <div style="margin-left: 30%">
+                        {{ item.company }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="growthtrend">
+            <div class="flex">
+              <div class="font">7日增长趋势</div>
+              <div class="flex button">
+                <el-button>货主</el-button>
+                <el-button>司机</el-button>
+                <el-button>车辆</el-button>
+              </div>
+            </div>
+            <div id="trend" style="width: 100%;height: 300px;"></div>
+          </div>
+          <div class="freightindex">
+            <div class="font">7日运价指数</div>
+            <div id="trends" style="width: 100%;height: 300px;"></div>
+          </div>
+          <div class="shippingvolume">
+            <div class="flex">
+              <div class="font">货物比例</div>
+              <div class="flex button">
+                <el-button>月度</el-button>
+                <el-button>年度</el-button>
+              </div>
+            </div>
+            <div id="goods" style="width: 100%;height: 300px;"></div>
+          </div>
+        </div>
+        <div style="width: 20%;">
+          <div>123</div>
+          <div>123</div>
+          <div class="table">
+            <el-table
+                :data="tableData"
+                style="width: 100%">
+              <el-table-column
+                  prop="date"
+                  label="日期">
+              </el-table-column>
+              <el-table-column
+                  prop="name"
+                  label="姓名">
+              </el-table-column>
+              <el-table-column
+                  prop="address"
+                  label="地址">
+              </el-table-column>
+            </el-table>
+          </div>
+        </div>
+        <div style="width: 20%;">
+          <div class="flex wrap" style="width: 80%;">
+            <div v-for="(item,index) in 8" style="margin-right: 10px;text-align: center;margin-bottom: 10px;">
+              <div>累计货主</div>
+              <div>300家</div>
+            </div>
+          </div>
+          <div>123</div>
+          <div>
+            <div>热门线路运次排名(月度)</div>
+            <ul class="list-type flex" v-for="(item,index) in 10" :key="index">
+              <li class="flex">
+                <div style="background: green">top1</div>
+                <div>安阳</div>
+                <div>-------</div>
+                <div>梅州</div>
+              </li>
+            </ul>
+          </div>
+          <div>123</div>
+        </div>
+        <div style="width:20%;">
+          <div>
+            <table>
               <tr>
-                <th>实时在线</th>
-                <td>7061</td>
-              </tr>
-              <tr>
-                <th>今日在线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>3日离线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>7日离线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>30日以上</th>
-                <td>123</td>
+                <td v-for="(item,key,index) in state" :key="index">
+                  <ul class="list-type">
+                    <li>{{ key }}</li>
+                    <li class="flex" v-for="(ite,ind) in item" :key="ind">
+                      <div>⭐</div>
+                      <div>{{ ite.title }}</div>
+                      <div>{{ ite.num }}</div>
+                    </li>
+                  </ul>
+                </td>
               </tr>
             </table>
           </div>
-          <div style="width:60%;">
-            <div style="width: 100%;height: 90%;" id="chart">
-
-            </div>
-          </div>
-        </div>
-        <div class="police">
-          <div class="flex around">
-            <div class="font">{{ this.name }}</div>
-            <div class="distribution">
-              <button @click="ap(index)" :id="index" v-for="(item,index) in this.button_id" :key="index">{{
-                  item
-                }}
-              </button>
-            </div>
-          </div>
-          <div id="chart1"></div>
-        </div>
-      </div>
-      <!--  地图  -->
-      <div class="analysis">
-        <div class="mileage">
-          <h2 style="text-align: center;color: white;">车辆行驶里程风险</h2>
-          <div class="flex around" style="height: 90%">
-            <div class="kilometre">
-              <div v-for="(item,index) in this.travel" :key="index">{{ item.title }}安全行驶累计里程 <span>{{
-                  item.num
-                }}</span> 公里
+          <div class="volume">
+            <div class="flex">
+              <div class="font">车型和发运量</div>
+              <div class="flex button">
+                <el-button>车辆占比</el-button>
+                <el-button>发运量占比</el-button>
               </div>
             </div>
-            <div class="vehicle-mileage">
-              <div style="width: 100%;height: 80%;" id="yesterday-mileage"></div>
-            </div>
+            <div id="shipping" style="width: 100%;height: 300px;"></div>
           </div>
-        </div>
-        <div class="map">
-          <div class="statistics">
-            <div>车辆总数：1</div>
-            <div>在线数量：2</div>
-            <div>离线数量：3</div>
+          <div>
+            <div>热门路线发运量排名(月度)</div>
+            <ul style="width: 100%;" class="list-type flex" v-for="(item,index) in 10" :key="index">
+              <li class="flex">
+                <div style="background: orange ">top1</div>
+                <div>安阳</div>
+                <div>-------</div>
+                <div>梅州</div>
+              </li>
+            </ul>
           </div>
-          <div class="amap-example">
-            <amap
-                ref="centerMap"
-            >
-            </amap>
-          </div>
-          <div class="vehicle">
-            <div>
-              <el-button>
-                危货车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                客运车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                货运车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                出租车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                公交车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                汇总
-              </el-button>
-            </div>
-          </div>
-        </div>
-        <div class="roll">
-          <el-table
-              :data="tableData"
-              height="170"
-              ref="table"
-              :header-cell-style="{
-                background: '#00065CFF',
-                color: '#fff',
-                }"
-          >
-            <el-table-column
-                prop="date"
-                label="日期"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="name"
-                label="姓名"
-                width="180">
-            </el-table-column>
-            <el-table-column
-                prop="address"
-                label="地址">
-            </el-table-column>
-          </el-table>
-        </div>
-      </div>
-      <!--  业主车辆报警汇总  -->
-      <div class="property">
-        <div class="security">
-          <div class="flex early-warning">
-            <div class="active-safety">
-              <div class="align">
-                <div class="line"><span class="icon iconfont icon-anquan"></span></div>
-                <div class="margin">2350</div>
-              </div>
-              <div class="align">主动安全车辆数</div>
-            </div>
-            <div class="police">
-              <div class="align">
-                <div class="line"><span class="icon iconfont icon-zuoyebaojing-copy"></span></div>
-                <div>2</div>
-              </div>
-              <div class="align">主动安全车辆数</div>
-            </div>
-          </div>
-          <div class="flex around align intelligence">
-            <div>
-              <div class="high-risk">246</div>
-              <div>高风险</div>
-            </div>
-            <div>
-              <div class="medium-risk">246</div>
-              <div>中风险</div>
-            </div>
-            <div>
-              <div class="low-risk">246</div>
-              <div>低风险</div>
-            </div>
-          </div>
-        </div>
-        <div class="suspected-faulty-vehicle">
-          <div class="left">驾驶异常报警分布</div>
-          <div id="suspected-fault"></div>
-        </div>
-        <div class="risk">
-          <div class="left">近30日风险趋势</div>
-          <div id="risk-trend"></div>
         </div>
       </div>
     </div>
@@ -262,7 +178,7 @@
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
-import "../css/font_3640822_3f52u20dc27/iconfont.css"
+
 export default {
   name: 'HomeView',
   components: {
@@ -270,7 +186,298 @@ export default {
   },
   data() {
     return {
-      tableData: [{
+      ranking: [
+        {
+          name: '发布总量',
+          origin: '',
+        },
+        {
+          name: '完成总量',
+          origin: '',
+        },
+        {
+          name: '运费总额',
+          origin: '',
+        },
+      ],
+      acceptcarriage: [
+        {
+          name: '发运量',
+          green: '',
+        },
+        {
+          name: '发运车次',
+          green: '',
+        },
+        {
+          name: '运费收入',
+          green: '',
+        },
+      ],
+      NewTime: '',
+      timer: '',
+      timeData: '',
+      amountnum: [
+        {
+          title: '今日运单量',
+          num: '300',
+          company: '单'
+        },
+        {
+          title: '今日发运量',
+          num: '300',
+          company: ''
+        },
+        {
+          title: '今日发运车次',
+          num: '300',
+          company: ''
+        },
+        {
+          title: '今日',
+          num: '30000',
+          company: ''
+        },
+        {
+          title: '今日运单量',
+          num: '300',
+          company: ''
+        },
+        {
+          title: '今日运单量',
+          num: '300',
+          company: ''
+        },
+      ],
+      optiontrend: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['12.01', '12.02', '12.03', '12.04', '12.05', '12.06', '12.07']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [13, 13, 11, 12, 14, 12, 14],
+            type: 'line',
+            areaStyle: {},
+            smooth: true,
+          }
+        ]
+      },
+      optiontrends: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: false,
+          data: ['12.01', '12.02', '12.03', '12.04', '12.05', '12.06', '12.07']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [13, 13, 11, 12, 14, 12, 14],
+            type: 'line',
+            color: '#f2637c',
+            areaStyle: {},
+            smooth: true,
+          }
+        ]
+      },
+      optiongoods: {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'bottom',
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: [
+              {value: 1048, name: '钢铁'},
+              {value: 735, name: '煤炭'},
+              {value: 580, name: '焦炭'},
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      },
+      optionconsignor: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: function (params) {
+            var tar = params[0];
+            // return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+            return "第" + tar.name + '名' + '<br/>' + tar.value + "辆"
+          }
+        },
+        xAxis: {
+          type: 'category',
+          data: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: [5004, 4020, 3500, 3500, 3000, 2600, 2000, 1600, 1000, 400],
+            type: 'bar',
+            showBackground: true,
+            color: '#f6a02e',
+            backgroundStyle: {
+              color: 'rgb(8,32,78)'
+            },
+            label: {
+              show: true,
+              position: 'inside',
+              color: '#fff'
+            },
+          }
+        ]
+      },
+      optionline: {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          },
+          formatter: function (params) {
+            var tar = params[0];
+            // return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value;
+            return tar.name + '<br/>' + tar.value + "公里"
+          }
+        },
+        xAxis: {
+          type: 'value',
+        },
+        yAxis: {
+          type: 'category',
+          data: ['0-20', '20-50', '50-100', '100-150', '150-200', '200+']
+        },
+        series: [
+          {
+            data: [120, 200, 150, 80, 70, 110],
+            type: 'bar',
+            showBackground: true,
+            color: '#43c7c9',
+            backgroundStyle: {
+              color: 'rgb(7,29,76)'
+            },
+            label: {
+              show: true,
+              position: 'inside',
+              color: '#fff'
+            },
+          }
+        ]
+      },
+      optionshipping: {
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'bottom',
+          textStyle: {
+            color: "#fff"
+          }
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '40%',
+            data: [
+              {value: 1, name: '高栏车'},
+              {value: 2, name: '冷藏车'},
+              {value: 3, name: '危险品车'},
+              {value: 4, name: '普通货车'},
+              {value: 5, name: '牵引车'}
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)',
+              }
+            },
+          }
+        ]
+      },
+      state: {
+        运单状态: [
+          {
+            title: "装货中",
+            num: '15'
+          },
+          {
+            title: "运输中",
+            num: '10'
+          },
+          {
+            title: "待签单",
+            num: '5'
+          },
+          {
+            title: "待回单",
+            num: '75'
+          }
+        ],
+        车辆状态: [
+          {
+            title: "在线",
+            num: '15'
+          },
+          {
+            title: "离线",
+            num: '10'
+          },
+          {
+            title: "重驶",
+            num: '5'
+          },
+          {
+            title: "空驶",
+            num: '75'
+          }
+        ]
+
+      }, tableData: [{
         date: '2016-05-02',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1518 弄'
@@ -286,803 +493,301 @@ export default {
         date: '2016-05-03',
         name: '王小虎',
         address: '上海市普陀区金沙江路 1516 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }],
-      title: '',
-      positions: [], // 保存坐标
-      newList: [], // 数据
-      option: {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c}辆 ({d}%)'
-        },
-        // color:['red','yellow','green','blue',''],
-        series: [
-          {
-            name: '车辆上线情况',
-            type: 'pie',
-            radius: ['50%', '100%'],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: 'center'
-            },
-
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '20',
-                fontWeight: 'bold'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: [
-              {value: 1048, name: '实时在线'},
-              {value: 735, name: '今日在线'},
-              {value: 580, name: '3日离线'},
-              {value: 484, name: '7日离线'},
-              {value: 300, name: '30日以上'}
-            ]
-          }
-        ]
-      },
-      faulty: {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b} : {c}辆 '
-        },
-        xAxis: {
-          type: 'category',
-          data: ['生理疲劳', '抽烟', '打电话', '分神驾驶', '驾驶员异常', '其他报警'],
-          axisLabel: {
-            interval: 0,
-            rotate: 20,
-            margin: 20,
-            textStyle: {
-              align: 'center'
-            },
-
-          },
-        },
-        yAxis: {
-          type: 'value'
-        },
-        textStyle: {
-          color: '#fff'
-        },
-        series: [
-          {
-            data: [120, 200, 150, 80, 70, 110, 130],
-            type: 'bar'
-          }
-        ]
-      },
-      options: {
-        legend: {
-          textStyle: {
-            color: "#fff"
-          }
-        },
-
-        tooltip: {},
-        textStyle: {
-          color: '#fff'
-        },
-        xAxis: {
-          type: 'category',
-          axisLabel: {
-            interval: 0,
-            rotate: 20,
-            margin: 20,
-            textStyle: {
-              align: 'center'
-            },
-
-          },
-          data: ['超速报警', '疲劳驾驶', '2-5时禁驾', '偏离路线', '其他报警']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '报警总数',
-            type: 'bar',
-            data: [150, 105, 110, 100, 100],
-          },
-          {
-            name: '已处理',
-            type: 'bar',
-            data: [220, 82, 100, 100, 63],
-          }
-        ]
-      },
-      trend: {
-        tooltip: {
-          trigger: 'axis',
-        },
-        legend: {
-          data: ['高风险', '中风险', '低风险'],
-          textStyle: {
-            color: "#fff"
-          }
-        },
-        textStyle: {
-          color: "#fff"
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '单位:分'
-          }
-        ],
-        series: [
-          {
-            name: '高风险',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: [2, 3, 4, 5, 6, 7, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 5467, 12, 210, 1, 2, 10, 214, 514, 5234, 213, 412, 423, 543]
-          },
-          {
-            name: '中风险',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: [2, 3, 4, 5123, 6, 7, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 547, 12, 210, 1, 2, 10, 214, 514, 524, 213, 412, 423, 543]
-          },
-          {
-            name: '低风险',
-            type: 'line',
-            stack: 'Total',
-            areaStyle: {},
-            emphasis: {
-              focus: 'series'
-            },
-            data: [2, 3, 4, 5, 6, 437, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 467, 12, 210, 1, 2, 10, 214, 514, 5234, 213, 412, 423, 543]
-          }
-        ]
-      },
-      vehicle_running: {
-        tooltip: {
-          trigger: 'item'
-        },
-        series: [
-          {
-            name: '昨日里程',
-            type: 'pie',
-            radius: '100%',
-            data: [
-              {value: 1048, name: '100公里以下'},
-              {value: 735, name: '100-200公里'},
-              {value: 580, name: '200-500公里'},
-              {value: 484, name: '500-1000公里'},
-              {value: 300, name: '1000-1500公里'},
-              {value: 484, name: '超过1500公里'},
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      },
-
-      num: [0, 0, 0, 6, 0, 9],
-      button_id: ['今日报警分布', '驾驶异常分布'],
-      name: '今日报警分布',
-      travel: [
-        {
-          title: '车辆',
-          num: '94006812'
-        },
-        {
-          title: '本月',
-          num: '955980'
-        },
-        {
-          title: '今日',
-          num: '504162'
-        }
-      ]
+      }]
     }
   },
   mounted() {
     this.getmounted()
-
   },
   methods: {
-    ap(id) {
-      this.name = document.getElementById(id).innerHTML
-      // console.log(this.option.series[0].name)
-      // this.options.series[0].name = '123'
-      // this.options.series[1].name = '13'
-      if (id == 0) {
-        this.options.xAxis.data = ['超速报警', '疲劳驾驶', '2-5时禁驾', '偏离路线', '其他报警']
-        this.options.series = [
-          {
-            name: '报警总数',
-            type: 'bar',
-            data: [150, 105, 110, 100, 100]
-          },
-          {
-            name: '已处理',
-            type: 'bar',
-            data: [220, 82, 100, 100, 63]
-          }
-        ]
-      } else if (id == 1) {
-        this.options.xAxis.data = ['生理疲劳', '抽烟', '打电话', '分神驾驶', '驾驶员异常', '其他报警']
-        this.options.series = [
-          {
-            name: '报警总数',
-            type: 'bar',
-            data: [1250, 1205, 1120, 1020, 1200, 500]
-          },
-          {
-            name: '已处理',
-            type: 'bar',
-            data: [2210, 812, 1010, 1010, 613, 1000]
-          }
-        ]
+    ownercargo(i) {
+      for (let index = 0; index < this.ranking.length; index++) {
+        console.log(index, i)
+        this.ranking[index].origin = ''
+        if (i == index) {
+          this.ranking[i].origin = 'origin'
+        }
       }
-      // this.options.xAxis.data = ['生理疲劳', '抽烟', '打电话', '分神驾驶', '驾驶员异常','其他报警']
-      // this.options.series =  {
-      //   name: '报警总数',
-      //   type: 'bar',
-      //   data: [1150, 105, 110, 100, 100]
-      // }
-      console.log(this.options.series)
-      this.getEchartData1()
+    },
+    undertaketransport(i) {
+      for (let index = 0; index < this.acceptcarriage.length; index++) {
+        console.log(index, i)
+        this.acceptcarriage[index].green = ''
+        if (i == index) {
+          this.acceptcarriage[i].green = 'green'
+        }
+      }
+    },
+    getTrends() {
+      const myChart = this.$echarts.init(document.getElementById("trend"))
+      myChart.setOption(this.optiontrend);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getgoods() {
+      const myChart = this.$echarts.init(document.getElementById("goods"))
+      myChart.setOption(this.optiongoods);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getTrend() {
+      const myChart = this.$echarts.init(document.getElementById("trends"))
+      myChart.setOption(this.optiontrends);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getconsignor() {
+      const myChart = this.$echarts.init(document.getElementById("consignor"))
+      myChart.setOption(this.optionconsignor);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getline() {
+      const myChart = this.$echarts.init(document.getElementById("line"))
+      myChart.setOption(this.optionline);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getshipping() {
+      const myChart = this.$echarts.init(document.getElementById("shipping"))
+      myChart.setOption(this.optionshipping);
+      window.addEventListener("resize", function () {
+        myChart.resize()
+      })
+    },
+    getTime() {
+      this.timer = setInterval(() => {
+        this.NewTime = new Date()
+      }, 100)
+
+    },
+    getNum() {
+      for (let i = 0; i < this.amountnum.length; i++) {
+        if (this.amountnum[i].num.length >= 5) {
+        } else {
+          this.amountnum[i].num = "00" + this.amountnum[i].num
+        }
+      }
     },
     getmounted() {
-      this.getEchartData()
-      this.getEchartData1()
-      this.getEchartfaulty()
-      this.getEcharttrend()
-      this.getEchartvehicle()
-      this.autoscroll()
-    },
-    setData() {
-      this.newList = [
-        {
-          wz: [116.415999, 39.907888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-        {
-          wz: [116.715999, 39.207888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-        {
-          wz: [116.915999, 39.507888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-      ]
-      this.positions = this.newList.map(item => item.wz)
-    },
-    loadmap() {
-      // 此处有坑，setTimeout异步加载防止刷新页面地图丢失
-      setTimeout(() => {
-        let map = new AMap.Map('container', {
-          resizeEnable: true,
-          center: this.positions[0],
-          zoom: 13
-        });
-
-        // 创建一个 点标记Icon
-
-        let startIcon = new AMap.Icon({
-          size: new AMap.Size(40, 40),
-          image: mapIcon,
-          imageSize: new AMap.Size(40, 40)
-        });
-
-        // 循环多点标记
-
-        let i = 0, marker;
-        for (; i < this.newList.length; i++) {
-          marker = new AMap.Marker({
-            map: map,
-            icon: startIcon,
-            position: this.newList[i].wz
-          })
-          marker.content = `<div class="markerContent"><p>任务名称：` + this.newList[i].rwmc + `</p>` + `<p>办理时间：` + this.newList[i].cfsj + `</p></div>`
-
-          //定位标记内容
-
-          let text = new AMap.Text({
-            text: `<div class="markerContent"><p><span>任务名称：</span><span class="scrollAuto"><span>` +
-                this.newList[i].rwmc +
-                `</span></span></p>` +
-                `<p>办理时间：` +
-                this.newList[i].cfsj +
-                `</p></div>`,
-            anchor: 'bottom-center',
-            draggable: true,
-            cursor: 'pointer',
-            style: {
-              'background-color': 'rgba(0, 255, 255, 0.6)',
-              'text-align': 'left',
-              'font-size': '14px',
-              color: '#fff',
-              padding: '5px 15px',
-              position: this.newList[i].wz,
-              offset: new AMap.Pixel(51, -45)
-            },
-          })
-        }
-      })
-    },
-    getEchartData() {
-      const myChart = this.$echarts.init(document.getElementById('chart'));
-      const seriesLabel = {
-        show: true
-      };
-
-      myChart.setOption(this.option);
-      window.addEventListener("resize", function () {
-        myChart.resize()
-      })
-
-    },
-    getEchartData1() {
-      let myChart = this.$echarts.init(document.getElementById('chart1'));
-      const seriesLabel = {
-        show: true
-      };
-
-      myChart.setOption(this.options);
-      window.addEventListener("resize", function () {
-        myChart.resize()
-      })
-
-    },
-    getEchartfaulty() {
-      let myChart = this.$echarts.init(document.getElementById('suspected-fault'));
-      const seriesLabel = {
-        show: true
-      };
-
-      myChart.setOption(this.faulty);
-      window.addEventListener("resize", function () {
-        myChart.resize()
-      })
-    },
-    getEcharttrend() {
-      let myChart = this.$echarts.init(document.getElementById('risk-trend'));
-      const seriesLabel = {
-        show: true
-      };
-
-      myChart.setOption(this.trend);
-      window.addEventListener("resize", function () {
-        myChart.resize()
-      })
-    },
-    getEchartvehicle() {
-      let myChart = this.$echarts.init(document.getElementById('yesterday-mileage'));
-      const seriesLabel = {
-        show: true
-      };
-
-      myChart.setOption(this.vehicle_running);
-      window.addEventListener("resize", function () {
-        myChart.resize()
-      })
-    },
-    autoscroll() {
-      const table = this.$refs.table
-      const divData = table.bodyWrapper
-      setInterval(() => {
-        divData.scrollTop += 1
-        if (divData.clientHeight + divData.scrollTop === divData.scrollHeight) {
-          divData.scrollTop = 0
-        }
-      }, 30)
+      this.getNum()
+      this.getTime()
+      this.getTrends()
+      this.getTrend()
+      this.getgoods()
+      this.getconsignor()
+      this.getline()
+      this.getshipping()
     }
-  }
+  },
+  filters: {
+    formatDate(time) {
+      let year = time.getFullYear()
+      let mounth = time.getMonth()
+      let day = time.getDate()
+      let hours = time.getHours()
+      hours = hours >= 10 ? hours : "0" + hours;
+      let minutes = time.getMinutes()
+      minutes = minutes >= 10 ? minutes : "0" + minutes;
+      let seconds = time.getSeconds();
+      seconds = seconds >= 10 ? seconds : "0" + seconds;
+      let week = time.getDay();
+      let weekArr = [
+        "星期日",
+        "星期一",
+        "星期二",
+        "星期三",
+        "星期四",
+        "星期五",
+        "星期六",
+      ];
+      return `${year}-${mounth}-${day} ${weekArr[week]} ${hours}:${minutes}:${seconds} `
+    },
+  },
+  beforeDestroy() {
+    if (this.timer) {
+      clearInterval(this.timer);
+
+    }
+  },
 }
 </script>
-<style lang="scss" scoped>
-#particles-js {
-  width: 99%;
-  height: calc(100% - 100px);
-  position: absolute;
-}
-
+<style scoped lang="scss">
 .home {
   width: 100%;
-  min-width: 1904px;
-  height: 911px;
-  background: #00065b url(../img/bg.jpg) no-repeat 0 0;
-  overflow: hidden;
+  height: 100%;
+  min-height: 1080px;
+  min-width: 1920px;
+  background: url(../img/huihao/组2.png) no-repeat;
   background-size: cover;
   margin: 0;
   padding: 0;
-  border: none;
-  //position: relative;
+  color: white;
 
-  .head {
-    width: 100%;
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2%;
-    position: relative;
+  .ranking {
+    width: 19%;
+    margin-left: 1%;
 
+    .row {
+      .font {
+        color: #f59f2e;
+        width: 100%;
+      }
 
-    .left {
-      width: 25%;
-      display: flex;
-      justify-content: space-between;
-      margin-left: 5%;
-    }
+      .button {
+        width: 70%;
 
-    h1 {
-      color: white;
-    }
+        .el-button {
+          line-height: 0;
+          background: #033b76;
+          color: white;
+          border: 0;
+          padding: 5px;
+        }
 
-    .right {
-      width: 25%;
-      display: flex;
-      justify-content: space-between;
-      margin-right: 5%;
+        .el-button:hover {
+          background: #f59f2e;
+        }
 
-      .el-button {
-
+        .origin {
+          background: #f59f2e;
+        }
       }
     }
 
-    .el-button {
-      width: 25%;
-      color: white;
-      background: #00065b url(../img/bnt.png) no-repeat;
-      text-align: center;
-      background-size: cover;
-      border: 0;
-      margin-top: 10%;
+    .spacing {
+      .font {
+        color: #43c6c8;
+        background: #013064;
+      }
+    }
+
+    .carrier {
+      .font {
+        color: #2ac2de;
+        width: 100%;
+        margin-bottom: 30px;
+      }
+
+      .button {
+        width: 50%;
+
+        .el-button {
+          line-height: 0;
+          background: #033b76;
+          color: white;
+          border: 0;
+          padding: 5px;
+          margin-bottom: 30px;
+        }
+
+        .el-button:hover {
+          background: green;
+        }
+
+        .green {
+          background: green;
+        }
+      }
     }
   }
 
-  .summary {
-    width: 96%;
-    height: 87%;
-    display: flex;
-    justify-content: space-between;
-    margin: auto;
+  .statistics {
+    width: 19%;
 
-
-    .operate {
-      width: 22%;
+    #trend {
+      width: 100%;
       height: 100%;
-      background-size: cover;
-      //font-family: "Impact";
-
-      .border {
-        width: 95%;
-        height: 20%;
-        //border: 1px solid #00c2fd;
-        background: url(../img/1.png) no-repeat;
-        background-size: cover;
-        padding-top: 10%;
-        padding-left: 5%;
-        margin-bottom: 5%;
-        position: relative;
-
-        .enterprise {
-          width: 100%;
-          font-size: 15px;
-          line-height: 30px;
-          color: #00c2fd;
-          //margin-left: 5%;
-          margin-top: 1%;
-
-          .number {
-            width: 70%;
-            margin-right: 5%;
-
-            .total {
-              width: 19%;
-              color: white;
-              text-align: center;
-              margin-left: 1%;
-              font-size: 25px;
-              background: #00c3ed;
-              border-radius: 5px;
-            }
-          }
-        }
-      }
-
-      .vehicles {
-        width: 95%;
-        height: 24%;
-        background: url(../img/1.png) no-repeat;
-        background-size: cover;
-        color: white;
-        padding-top: 5%;
-        padding-left: 5%;
-        margin-bottom: 5%;
-        position: relative;
-
-        .online {
-          width: 40%;
-          //background: red;
-          table {
-            width: 100%;
-            height: 90%;
-            text-align: center;
-            border: 1px solid #00c2fd;
-            border-collapse: collapse;
-
-            th {
-              width: 50%;
-              background: #00c2fd;
-            }
-          }
-
-        }
-      }
-
-      .police {
-        width: 97%;
-        height: 40%;
-        color: white;
-        background: url("../img/1.png") no-repeat;
-        background-size: cover;
-        padding-top: 3%;
-        position: relative;
-        //margin-top: 30%;
-
-        .font {
-          font-weight: bolder;
-          margin-bottom: 3%;
-        }
-
-        .distribution {
-          button {
-            border-radius: 10px;
-            background: #00c2fd;
-            color: white;
-          }
-
-          button:hover {
-            cursor: pointer;
-          }
-        }
-
-        #chart1 {
-          width: 100%;
-          height: 95%;
-        }
-      }
-
     }
 
-    .analysis {
-      width: 55%;
-      height: 100%;
-
-      .roll {
-        height: 23%;
-        overflow: hidden;
-        background: url("../img/1.png") no-repeat;
-        background-size: cover;
-
-        ::v-deep .el-table {
-          width: 90%;
-          margin: 4% 0 0 7%;
-          height: 100%;
-          background: transparent;
-          color: white;
-
-          .el-table__body-wrapper::-webkit-scrollbar {
-            /*width: 0;宽度为0隐藏*/
-
-            width: 0;
-            display: none;
-          }
-
-          .gutter {
-            background: #00065c;
-          }
-
-          .el-table__body-wrapper {
-            background: transparent;
-          }
-
-          tr {
-            background: transparent;
-          }
-
-          tr:hover {
-            color: black;
-          }
-        }
+    .growthtrend {
+      .font {
+        width: 60%;
       }
 
-      .mileage {
-        width: 100%;
-        height: 20%;
-        margin: 1% auto;
-        background: url("../img/1.png") no-repeat;
-        background-size: cover;
+      .button {
+        width: 30%;
 
-        .vehicle-mileage {
-          width: 35%;
-          height: 100%;
-
-
-          #yesterday-mileage {
-            width: 100%;
-            height: 100%;
-          }
-        }
-      }
-
-      .kilometre {
-        width: 35%;
-        color: white;
-
-        span {
-          font-size: 3vh;
-        }
-
-        div {
-          line-height: 3vh;
-        }
-      }
-
-
-      .map {
-        width: 100%;
-        height: 50%;
-        background: url(../img/amiddboxttop.png) no-repeat;
-        background-size: 100%;
-        margin-bottom: 1%;
-        position: relative;
-
-        .amap-example {
-          width: 93%;
-          height: 75%;
-          margin-left: auto;
-          margin-right: auto;
-          margin-top: 1%;
-        }
-
-        .statistics {
-          width: 50%;
-          display: flex;
-          justify-content: space-between;
-          margin: auto;
-          padding-top: 1%;
+        .el-button {
+          line-height: 0;
+          background: #033b76;
           color: white;
-
-        }
-
-        .vehicle {
-          display: flex;
-          color: white;
-          width: 80%;
-          justify-content: space-between;
-          margin: auto;
-          padding-top: 5px;
-
-          .el-button {
-            width: 100%;
-            border: 0;
-            color: #00c2fd;
-            background: url(../img/bnt.png) no-repeat;
-          }
+          border: 0;
+          padding: 5px;
         }
       }
     }
 
+    .freightindex {
+      .font {
+        width: 60%;
+      }
+    }
 
-    .property {
-      width: 22%;
-      background-size: cover;
-      color: white;
-
-
-      .security {
-
-        width: 100%;
-        height: 25%;
-        background: url(../img/1.png) no-repeat;
-        background-size: cover;
-        margin-bottom: 5%;
-
-        .early-warning {
-          border-bottom: 1px dashed white;
-
-          .active-safety {
-            width: 50%;
-            padding-bottom: 3%;
-            border-right: 1px dashed white;
-          }
-
-          .police {
-            width: 50%;
-
-          }
-        }
-
-        .intelligence {
-          margin-top: 3%;
-
-          .high-risk {
-            color: red;
-          }
-
-          .medium-risk {
-            color: orange;
-          }
-
-          .low-risk {
-            color: yellow
-          }
-        }
-
+    .shippingvolume {
+      .font {
+        width: 55%;
       }
 
-      .suspected-faulty-vehicle {
-        width: 100%;
-        height: 25%;
-        background: url(../img/1.png) no-repeat;
-        background-size: cover;
-        padding-top: 3%;
-        margin-bottom: 5%;
+      .button {
+        width: 40%;
 
-        #suspected-fault {
-          width: 100%;
-          height: 100%;
+        .el-button {
+          line-height: 0;
+          background: #033b76;
+          color: white;
+          border: 0;
+          padding: 5px;
         }
       }
+    }
+  }
+  ::v-deep .table{
+    .el-table{
+      background: transparent;
+     //.el-table__cell{
+     //  background: transparent;
+     //}
+     tr{
+       background: transparent;
+     }
+     td{
+       color: white;
+       border: 0;
+     }
+     th{
+       background: #033b76;
+       border: 0;
+     }
+    }
+   .el-table__body tr:hover > td {
+      background-color: #3D52984F !important;
+    }    .el-table__row{
+      background: #2ac2de;
+    }
+    .el-table::before{
+      height: 0;
+    }
+  }
+  .volume{
+    .font {
+      width: 50%;
+    }
 
-      .risk {
-        width: 100%;
-        height: 40%;
-        background: url(../img/1.png) no-repeat;
-        background-size: cover;
-        //margin-top: 5%;
-        padding-top: 3%;
+    .button {
+      width: 40%;
 
-        #risk-trend {
-          width: 100%;
-          height: 90%;
-        }
+      .el-button {
+        line-height: 0;
+        background: #033b76;
+        color: white;
+        border: 0;
+        padding: 5px;
       }
     }
   }
@@ -1092,25 +797,28 @@ export default {
   display: flex;
 }
 
-.around {
-  justify-content: space-around;
+.title {
+  line-height: 80px;
+
+  h1 {
+    margin-left: 2%;
+  }
 }
 
-.align {
-  text-align: center;
-  margin-top: 15px;
+
+.between {
+  justify-content: space-between;
 }
 
-//
-//.line {
-//  line-height: 30px;
-//}
-
-.left {
-  margin-left: 8%;
+.wrap {
+  flex-wrap: wrap;
 }
 
-//.margin{
-//  margin-top: -10px;
-//}
+.list-type {
+  list-style-type: none;
+}
+
+.mar {
+  margin-left: 2%;
+}
 </style>
