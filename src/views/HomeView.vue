@@ -37,72 +37,56 @@
     <!--  按钮  -->
     <div class="head">
       <div class="left">
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
+        <el-button class="button" @click="opens('http://222.75.204.3:8081/#/login')">监管平台</el-button>
+        <el-button class="button" @click="opens('http://aimonitoring.rybsj.cn/webgis/login.jsp')">危货运输</el-button>
+        <el-button class="button" @click="opens('https://pc.huihaoyun.cn/login.html?v=1324/')">普货运输</el-button>
       </div>
       <div>
-        <h1> 物流大数据监管平台</h1>
+        <h1>宁东物流大数据监管平台</h1>
       </div>
       <div class="right">
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
-        <el-button class="button">监管平台</el-button>
+        <el-button class="button" @click="opens()">公铁联运</el-button>
+        <el-button class="button" @click="opens()">客运运输</el-button>
+        <el-button class="button" @click="opens()">大宗贸易</el-button>
       </div>
     </div>
     <div class="summary">
       <!--  当天车辆报警汇总  -->
       <div class="operate">
         <div class="border">
-          <div class="auto">
+          <div class="auto" v-for="(item,index) in totals" :key="index">
             <div class="enterprise flex">
               <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
+                <div class="total" v-for="(ite,ind) in item" :key="ind">
+                  <div>{{ ite }}</div>
+                </div>
+              </div>
+              <div>{{ index }}</div>
+            </div>
+            <!-- <div class="enterprise flex">
+              <div class="number flex">
+                <div class="total" v-for="(item,index) in num" :key="index">
                   <div>{{ item }}</div>
                 </div>
               </div>
-              <div>企业总数</div>
-            </div>
-            <div class="enterprise flex">
+              <div>个体总数</div>
+            </div> -->
+            <!-- <div class="enterprise flex">
               <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
+                <div class="total" v-for="(item,index) in num" :key="index">
                   <div>{{ item }}</div>
                 </div>
               </div>
-              <div>企业总数</div>
-            </div>
-            <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in this.num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
-              </div>
-              <div>企业总数</div>
-            </div>
+              <div>车辆总数</div>
+            </div> -->
           </div>
         </div>
         <div class="vehicles flex">
           <div class="online">
             <table cellspacing="0" border="1">
-              <tr>
-                <th>实时在线</th>
-                <td>7061</td>
-              </tr>
-              <tr>
-                <th>今日在线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>3日离线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>7日离线</th>
-                <td>123</td>
-              </tr>
-              <tr>
-                <th>30日以上</th>
-                <td>123</td>
+              <tr v-for="(item,index) in option.series[0].data" :key="index">
+                <th>{{ item.name }}</th>
+                <td>{{ item.value }}</td>
               </tr>
             </table>
           </div>
@@ -143,14 +127,51 @@
         </div>
         <div class="map">
           <div class="statistics">
-            <div>车辆总数：1</div>
-            <div>在线数量：2</div>
-            <div>离线数量：3</div>
+            <div>车辆总数：193</div>
+            <div>在线数量：160</div>
+            <div>离线数量：33</div>
           </div>
           <div class="amap-example">
             <amap
+                id="AmapMar"
                 ref="centerMap"
             >
+              <amap-map-type/>
+              <!--              <amap-district-layer-province />-->
+              <div v-for="(item,index) in amapCoordinate">
+                <amap-marker
+                    :key="index"
+                    :position="item.position"
+                    auto-move
+                    is-custom
+                >
+                  <el-popover
+                      placement="right"
+                      width="400"
+                      trigger="click"
+                  >
+                    <table style="width: 100%;text-align: center;" cellspacing="0" border="1">
+                      <tr>
+                        <th>姓名</th>
+                        <th>车牌号</th>
+                        <th>出发地</th>
+                        <th>到达地</th>
+                        <th>货物类型</th>
+                      </tr>
+                      <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.license }}</td>
+                        <td>{{ item.departure }}</td>
+                        <td>{{ item.destination }}</td>
+                        <td>{{ item.type }}</td>
+                      </tr>
+                    </table>
+                    <div slot="reference" class="icon iconfont" v-html="iconStyle[index]">
+                    </div>
+                  </el-popover>
+                </amap-marker>
+              </div>
+
             </amap>
           </div>
           <div class="vehicle">
@@ -189,7 +210,7 @@
         <div class="roll">
           <el-table
               :data="tableData"
-              height="170"
+              height="100%"
               ref="table"
               :header-cell-style="{
                 background: '#00065CFF',
@@ -198,17 +219,19 @@
           >
             <el-table-column
                 prop="date"
-                label="日期"
-                width="180">
+                label="车牌号">
             </el-table-column>
             <el-table-column
                 prop="name"
-                label="姓名"
-                width="180">
+                label="车牌颜色">
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="地址">
+                label="归属地">
+            </el-table-column>
+            <el-table-column
+                prop="Belonging"
+                label="所属业户">
             </el-table-column>
           </el-table>
         </div>
@@ -220,7 +243,7 @@
             <div class="active-safety">
               <div class="align">
                 <div class="line"><span class="icon iconfont icon-anquan"></span></div>
-                <div class="margin">2350</div>
+                <div class="margin">88</div>
               </div>
               <div class="align">主动安全车辆数</div>
             </div>
@@ -229,20 +252,20 @@
                 <div class="line"><span class="icon iconfont icon-zuoyebaojing-copy"></span></div>
                 <div>2</div>
               </div>
-              <div class="align">主动安全车辆数</div>
+              <div class="align">今日报警数</div>
             </div>
           </div>
           <div class="flex around align intelligence">
             <div>
-              <div class="high-risk">246</div>
+              <div class="high-risk">51</div>
               <div>高风险</div>
             </div>
             <div>
-              <div class="medium-risk">246</div>
+              <div class="medium-risk">24</div>
               <div>中风险</div>
             </div>
             <div>
-              <div class="low-risk">246</div>
+              <div class="low-risk">13</div>
               <div>低风险</div>
             </div>
           </div>
@@ -262,7 +285,8 @@
 
 <script>
 import HelloWorld from '@/components/HelloWorld.vue'
-import "../css/font_3640822_3f52u20dc27/iconfont.css"
+import "../css/font/iconfont.css"
+
 export default {
   name: 'HomeView',
   components: {
@@ -270,29 +294,63 @@ export default {
   },
   data() {
     return {
+      amapCoordinate: [
+        {
+          position: [116.464258, 39.999067],
+          name: '张三',
+          license: '宁A123123',
+          departure: '宁夏',
+          destination: "北京",
+          type: '公交',
+        },
+        {
+          position: [106.567821, 38.192319],
+          name: '李四',
+          license: '宁C123123',
+          departure: '宁夏',
+          destination: "上海",
+          type: '危货',
+        },
+      ],
       tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
+        date: '宁AK2600',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏众鑫运输有限公司'
       }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄'
+        date: '宁AG8205',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏众鑫运输有限公司'
       }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
+        date: '宁AB9991',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏孚惠工贸有限公司'
       }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄'
+        date: '宁AL0897',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏众鑫运输有限公司'
       }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄'
-      }],
+        date: '宁AM9098',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '	宁夏孚惠工贸有限公司'
+      }, {
+        date: '宁AJ8338',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏众鑫运输有限公司'
+      }, {
+        date: '宁AL0875',
+        name: '黄色',
+        address: '宁夏回族自治区',
+        Belonging: '宁夏众鑫运输有限公司'
+      }
+
+      ],
       title: '',
-      positions: [], // 保存坐标
       newList: [], // 数据
       option: {
         tooltip: {
@@ -322,11 +380,11 @@ export default {
               show: false
             },
             data: [
-              {value: 1048, name: '实时在线'},
-              {value: 735, name: '今日在线'},
-              {value: 580, name: '3日离线'},
-              {value: 484, name: '7日离线'},
-              {value: 300, name: '30日以上'}
+              {value: 157, name: '今日在线'},
+              {value: 33, name: '今日离线'},
+              {value: 14, name: '3日离线'},
+              {value: 8, name: '7日离线'},
+              {value: 0, name: '30日以上'}
             ]
           }
         ]
@@ -334,7 +392,7 @@ export default {
       faulty: {
         tooltip: {
           trigger: 'item',
-          formatter: '{b} : {c}辆 '
+          formatter: '{b} : {c}次 '
         },
         xAxis: {
           type: 'category',
@@ -357,7 +415,7 @@ export default {
         },
         series: [
           {
-            data: [120, 200, 150, 80, 70, 110, 130],
+            data: [260, 26, 37, 266, 40, 2253],
             type: 'bar'
           }
         ]
@@ -368,8 +426,10 @@ export default {
             color: "#fff"
           }
         },
-
-        tooltip: {},
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {c}次 '
+        },
         textStyle: {
           color: '#fff'
         },
@@ -391,18 +451,19 @@ export default {
           {
             name: '报警总数',
             type: 'bar',
-            data: [150, 105, 110, 100, 100],
+            data: [1, 0, 0, 0, 0],
           },
           {
             name: '已处理',
             type: 'bar',
-            data: [220, 82, 100, 100, 63],
+            data: [1, 0, 0, 0, 0],
           }
         ]
       },
       trend: {
         tooltip: {
-          trigger: 'axis',
+          trigger: 'item',
+          formatter: '第{b}日 : 有{c}辆'
         },
         legend: {
           data: ['高风险', '中风险', '低风险'],
@@ -429,7 +490,6 @@ export default {
         yAxis: [
           {
             type: 'value',
-            name: '单位:分'
           }
         ],
         series: [
@@ -437,37 +497,59 @@ export default {
             name: '高风险',
             type: 'line',
             stack: 'Total',
-            areaStyle: {},
+            areaStyle: {
+              color: '#ec6666'
+            },
+            itemStyle: {
+              normal: {
+                color: '#ec6666'
+              }
+            },
             emphasis: {
               focus: 'series'
             },
-            data: [2, 3, 4, 5, 6, 7, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 5467, 12, 210, 1, 2, 10, 214, 514, 5234, 213, 412, 423, 543]
+            data: [0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 10, 18, 30, 33, 33, 31, 32, 29, 26, 26, 30, 24, 23, 28, 31, 24, 20, 24, 23, 24]
           },
           {
             name: '中风险',
             type: 'line',
             stack: 'Total',
-            areaStyle: {},
+            areaStyle: {
+              color: '#fda401'
+            },
+            itemStyle: {
+              normal: {
+                color: '#fda401'
+              }
+            },
             emphasis: {
               focus: 'series'
             },
-            data: [2, 3, 4, 5123, 6, 7, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 547, 12, 210, 1, 2, 10, 214, 514, 524, 213, 412, 423, 543]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 6, 5, 5, 4, 1, 3, 5, 5, 5, 3, 8, 8, 1, 4, 10, 9, 8]
           },
           {
             name: '低风险',
             type: 'line',
             stack: 'Total',
-            areaStyle: {},
+            areaStyle: {
+              color: '#8fca75'
+            },
+            itemStyle: {
+              normal: {
+                color: '#8fca75'
+              }
+            },
             emphasis: {
               focus: 'series'
             },
-            data: [2, 3, 4, 5, 6, 437, 8, 9, 10, 120, 132, 101, 134, 90, 230, 543, 123, 467, 12, 210, 1, 2, 10, 214, 514, 5234, 213, 412, 423, 543]
+            data: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 26, 38, 44, 42, 46, 45, 40, 35, 35, 41, 39, 38, 39, 45, 40, 35, 41, 41, 44]
           }
         ]
       },
       vehicle_running: {
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          formatter: '{b} : 有{c}辆 '
         },
         series: [
           {
@@ -491,9 +573,13 @@ export default {
             }
           }
         ]
+      }
+      ,
+      totals: {
+        企业总数: [0, 0, 0, 0, 0, 3],
+        个体总数: [0, 0, 0, 0, 0, 0],
+        车辆总数: [0, 0, 0, 1, 9, 3]
       },
-
-      num: [0, 0, 0, 6, 0, 9],
       button_id: ['今日报警分布', '驾驶异常分布'],
       name: '今日报警分布',
       travel: [
@@ -509,14 +595,38 @@ export default {
           title: '今日',
           num: '504162'
         }
-      ]
+      ],
+      map: null,
+      marker: [],
+      iconStyle: [],
     }
   },
   mounted() {
     this.getmounted()
-
   },
   methods: {
+    iconColor() {
+      // this.iconStyle = []
+      for (let i = 0; i < this.amapCoordinate.length; i++) {
+        switch (this.amapCoordinate[i].type) {
+          case "危货":
+            this.iconStyle.push("&#xe723;")
+            break;
+          case "普货" :
+            this.iconStyle.push("&#xe691;")
+            break;
+          case "客运":
+            this.iconStyle.push("&#xe66b;")
+            break;
+          case "公交":
+            this.iconStyle.push("&#xe660;")
+            break;
+          case "出租车":
+            this.iconStyle.push("&#xe722;")
+            break;
+        }
+      }
+    },
     ap(id) {
       this.name = document.getElementById(id).innerHTML
       // console.log(this.option.series[0].name)
@@ -557,7 +667,6 @@ export default {
       //   type: 'bar',
       //   data: [1150, 105, 110, 100, 100]
       // }
-      console.log(this.options.series)
       this.getEchartData1()
     },
     getmounted() {
@@ -567,82 +676,7 @@ export default {
       this.getEcharttrend()
       this.getEchartvehicle()
       this.autoscroll()
-    },
-    setData() {
-      this.newList = [
-        {
-          wz: [116.415999, 39.907888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-        {
-          wz: [116.715999, 39.207888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-        {
-          wz: [116.915999, 39.507888],
-          rybh: "123456789",
-          cfsj: "2021-08-27 11:28:46",
-          rwmc: "信息查询"
-        },
-      ]
-      this.positions = this.newList.map(item => item.wz)
-    },
-    loadmap() {
-      // 此处有坑，setTimeout异步加载防止刷新页面地图丢失
-      setTimeout(() => {
-        let map = new AMap.Map('container', {
-          resizeEnable: true,
-          center: this.positions[0],
-          zoom: 13
-        });
-
-        // 创建一个 点标记Icon
-
-        let startIcon = new AMap.Icon({
-          size: new AMap.Size(40, 40),
-          image: mapIcon,
-          imageSize: new AMap.Size(40, 40)
-        });
-
-        // 循环多点标记
-
-        let i = 0, marker;
-        for (; i < this.newList.length; i++) {
-          marker = new AMap.Marker({
-            map: map,
-            icon: startIcon,
-            position: this.newList[i].wz
-          })
-          marker.content = `<div class="markerContent"><p>任务名称：` + this.newList[i].rwmc + `</p>` + `<p>办理时间：` + this.newList[i].cfsj + `</p></div>`
-
-          //定位标记内容
-
-          let text = new AMap.Text({
-            text: `<div class="markerContent"><p><span>任务名称：</span><span class="scrollAuto"><span>` +
-                this.newList[i].rwmc +
-                `</span></span></p>` +
-                `<p>办理时间：` +
-                this.newList[i].cfsj +
-                `</p></div>`,
-            anchor: 'bottom-center',
-            draggable: true,
-            cursor: 'pointer',
-            style: {
-              'background-color': 'rgba(0, 255, 255, 0.6)',
-              'text-align': 'left',
-              'font-size': '14px',
-              color: '#fff',
-              padding: '5px 15px',
-              position: this.newList[i].wz,
-              offset: new AMap.Pixel(51, -45)
-            },
-          })
-        }
-      })
+      this.iconColor()
     },
     getEchartData() {
       const myChart = this.$echarts.init(document.getElementById('chart'));
@@ -661,12 +695,11 @@ export default {
       const seriesLabel = {
         show: true
       };
-
+      console.log(myChart)
       myChart.setOption(this.options);
       window.addEventListener("resize", function () {
         myChart.resize()
       })
-
     },
     getEchartfaulty() {
       let myChart = this.$echarts.init(document.getElementById('suspected-fault'));
@@ -710,6 +743,11 @@ export default {
           divData.scrollTop = 0
         }
       }, 30)
+    },
+    opens(url) {
+      if (url !== undefined) {
+        window.open(url, '_blank')
+      }
     }
   }
 }
@@ -717,7 +755,8 @@ export default {
 <style lang="scss" scoped>
 #particles-js {
   width: 99%;
-  height: calc(100% - 100px);
+  // height: calc(100% - 100px);
+  height: 95%;
   position: absolute;
 }
 
@@ -758,10 +797,6 @@ export default {
       display: flex;
       justify-content: space-between;
       margin-right: 5%;
-
-      .el-button {
-
-      }
     }
 
     .el-button {
@@ -780,7 +815,7 @@ export default {
     height: 87%;
     display: flex;
     justify-content: space-between;
-    margin: auto;
+    margin: -1% auto;
 
 
     .operate {
@@ -793,7 +828,7 @@ export default {
         width: 95%;
         height: 20%;
         //border: 1px solid #00c2fd;
-        background: url(../img/1.png) no-repeat;
+        background: url(../img/border.png) no-repeat;
         background-size: cover;
         padding-top: 10%;
         padding-left: 5%;
@@ -827,8 +862,8 @@ export default {
 
       .vehicles {
         width: 95%;
-        height: 24%;
-        background: url(../img/1.png) no-repeat;
+        height: 26%;
+        background: url(../img/vehicles.png) no-repeat;
         background-size: cover;
         color: white;
         padding-top: 5%;
@@ -857,9 +892,9 @@ export default {
 
       .police {
         width: 97%;
-        height: 40%;
+        height: 41%;
         color: white;
-        background: url("../img/1.png") no-repeat;
+        background: url("../img/police.png") no-repeat;
         background-size: cover;
         padding-top: 3%;
         position: relative;
@@ -895,14 +930,14 @@ export default {
       height: 100%;
 
       .roll {
-        height: 23%;
+        height: 25%;
         overflow: hidden;
-        background: url("../img/1.png") no-repeat;
+        background: url("../img/roll.png") no-repeat;
         background-size: cover;
 
         ::v-deep .el-table {
           width: 90%;
-          margin: 4% 0 0 7%;
+          margin: 2px auto;
           height: 100%;
           background: transparent;
           color: white;
@@ -934,20 +969,24 @@ export default {
 
       .mileage {
         width: 100%;
-        height: 20%;
-        margin: 1% auto;
-        background: url("../img/1.png") no-repeat;
+        height: 24%;
+        margin-bottom: 1%;
+        background: url("../img/mileage.png") no-repeat;
         background-size: cover;
+
+        h2 {
+          margin-top: 0;
+          margin-bottom: 1%;
+        }
 
         .vehicle-mileage {
           width: 35%;
           height: 100%;
 
-
-          #yesterday-mileage {
-            width: 100%;
-            height: 100%;
-          }
+          //#yesterday-mileage {
+          //  width: 100%;
+          //  height: 95%;
+          //}
         }
       }
 
@@ -960,7 +999,7 @@ export default {
         }
 
         div {
-          line-height: 3vh;
+          line-height: 4vh;
         }
       }
 
@@ -968,7 +1007,7 @@ export default {
       .map {
         width: 100%;
         height: 50%;
-        background: url(../img/amiddboxttop.png) no-repeat;
+        background: url(../img/amap.png) no-repeat;
         background-size: 100%;
         margin-bottom: 1%;
         position: relative;
@@ -1012,6 +1051,7 @@ export default {
 
     .property {
       width: 22%;
+      height: 100%;
       background-size: cover;
       color: white;
 
@@ -1020,7 +1060,7 @@ export default {
 
         width: 100%;
         height: 25%;
-        background: url(../img/1.png) no-repeat;
+        background: url(../img/security.png) no-repeat;
         background-size: cover;
         margin-bottom: 5%;
 
@@ -1059,8 +1099,8 @@ export default {
 
       .suspected-faulty-vehicle {
         width: 100%;
-        height: 25%;
-        background: url(../img/1.png) no-repeat;
+        height: 29%;
+        background: url(../img/suspected-faulty-vehicle.png) no-repeat;
         background-size: cover;
         padding-top: 3%;
         margin-bottom: 5%;
@@ -1074,7 +1114,7 @@ export default {
       .risk {
         width: 100%;
         height: 40%;
-        background: url(../img/1.png) no-repeat;
+        background: url(../img/risk.png) no-repeat;
         background-size: cover;
         //margin-top: 5%;
         padding-top: 3%;
@@ -1113,4 +1153,7 @@ export default {
 //.margin{
 //  margin-top: -10px;
 //}
+.icon-huoche {
+  color: green;
+}
 </style>
