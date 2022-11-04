@@ -31,7 +31,6 @@
         :clickEffect="true"
 
         clickMode="push" class="cash"
-
     >
     </vue-particles>
     <!--  按钮  -->
@@ -695,7 +694,6 @@ export default {
       const seriesLabel = {
         show: true
       };
-      console.log(myChart)
       myChart.setOption(this.options);
       window.addEventListener("resize", function () {
         myChart.resize()
@@ -737,6 +735,7 @@ export default {
     autoscroll() {
       const table = this.$refs.table
       const divData = table.bodyWrapper
+      console.log(table);
       setInterval(() => {
         divData.scrollTop += 1
         if (divData.clientHeight + divData.scrollTop === divData.scrollHeight) {
