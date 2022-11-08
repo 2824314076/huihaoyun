@@ -45,8 +45,8 @@
       </div>
       <div class="right">
         <el-button class="button" @click="opens()">公铁联运</el-button>
-        <el-button class="button" @click="opens()">客运运输</el-button>
         <el-button class="button" @click="opens()">大宗贸易</el-button>
+        <el-button class="button" @click="opens()">第三方服务</el-button>
       </div>
     </div>
     <div class="summary">
@@ -62,22 +62,6 @@
               </div>
               <div>{{ index }}</div>
             </div>
-            <!-- <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
-              </div>
-              <div>个体总数</div>
-            </div> -->
-            <!-- <div class="enterprise flex">
-              <div class="number flex">
-                <div class="total" v-for="(item,index) in num" :key="index">
-                  <div>{{ item }}</div>
-                </div>
-              </div>
-              <div>车辆总数</div>
-            </div> -->
           </div>
         </div>
         <div class="vehicles flex">
@@ -165,7 +149,7 @@
                         <td>{{ item.type }}</td>
                       </tr>
                     </table>
-                    <div slot="reference" class="icon iconfont" v-html="iconStyle[index]">
+                    <div slot="reference" class="icon iconfont" style="color: red" v-html="iconStyle[index]">
                     </div>
                   </el-popover>
                 </amap-marker>
@@ -181,22 +165,22 @@
             </div>
             <div>
               <el-button>
+                普货车
+              </el-button>
+            </div>
+            <div>
+              <el-button>
+                公铁联运
+              </el-button>
+            </div>
+            <div>
+              <el-button>
+                大宗贸易
+              </el-button>
+            </div>
+            <div>
+              <el-button>
                 客运车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                货运车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                出租车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                公交车
               </el-button>
             </div>
             <div>
@@ -209,7 +193,7 @@
         <div class="roll">
           <el-table
               :data="tableData"
-              height="100%"
+              height="99%"
               ref="table"
               :header-cell-style="{
                 background: '#00065CFF',
@@ -217,12 +201,12 @@
                 }"
           >
             <el-table-column
-                prop="date"
-                label="车牌号">
+                prop="name"
+                label="司机姓名">
             </el-table-column>
             <el-table-column
-                prop="name"
-                label="车牌颜色">
+                prop="date"
+                label="车牌号">
             </el-table-column>
             <el-table-column
                 prop="address"
@@ -231,6 +215,18 @@
             <el-table-column
                 prop="Belonging"
                 label="所属业户">
+            </el-table-column>
+            <el-table-column
+                prop="type"
+                label="货物种类">
+            </el-table-column>
+            <el-table-column
+                prop="description"
+                label="货物名称">
+            </el-table-column>
+            <el-table-column
+                prop="tonnage"
+                label="货物吨数">
             </el-table-column>
           </el-table>
         </div>
@@ -296,16 +292,16 @@ export default {
       amapCoordinate: [
         {
           position: [116.464258, 39.999067],
-          name: '张三',
-          license: '宁A123123',
+          name: '李默',
+          license: '宁AS5313',
           departure: '宁夏',
           destination: "北京",
-          type: '公交',
+          type: '普货',
         },
         {
           position: [106.567821, 38.192319],
-          name: '李四',
-          license: '宁C123123',
+          name: '秦放',
+          license: '宁C32761',
           departure: '宁夏',
           destination: "上海",
           type: '危货',
@@ -313,41 +309,61 @@ export default {
       ],
       tableData: [{
         date: '宁AK2600',
-        name: '黄色',
+        name: '李文华',
         address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司'
+        Belonging: '宁夏众鑫运输有限公司',
+        type: '腐蚀品',
+        description: '五氧化二磷',
+        tonnage: '10吨'
       }, {
         date: '宁AG8205',
-        name: '黄色',
+        name: '罗致',
         address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司'
+        Belonging: '宁夏众鑫运输有限公司',
+        type: '第七类',
+        description: '海洋污染物',
+        tonnage: '13吨'
       }, {
         date: '宁AB9991',
-        name: '黄色',
+        name: '王鑫',
         address: '宁夏回族自治区',
-        Belonging: '宁夏孚惠工贸有限公司'
+        Belonging: '宁夏孚惠工贸有限公司',
+        type: '爆炸品',
+        description: '液态二氧化碳',
+        tonnage: '8吨'
       }, {
         date: '宁AL0897',
-        name: '黄色',
+        name: '张猛',
         address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司'
+        Belonging: '宁夏众鑫运输有限公司',
+        type: '易燃物',
+        description: '甲烷',
+        tonnage: '20吨'
       }, {
         date: '宁AM9098',
-        name: '黄色',
+        name: '褚宇',
         address: '宁夏回族自治区',
-        Belonging: '	宁夏孚惠工贸有限公司'
+        Belonging: '	宁夏孚惠工贸有限公司',
+        type: '放射线物',
+        description: '二氧化镅',
+        tonnage: '26吨'
       }, {
         date: '宁AJ8338',
-        name: '黄色',
+        name: '李兴浩',
         address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司'
+        Belonging: '宁夏众鑫运输有限公司',
+        type: '氧化剂',
+        description: '氯酸钾',
+        tonnage: '30吨'
       }, {
         date: '宁AL0875',
-        name: '黄色',
+        name: '张浩',
         address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司'
+        Belonging: '宁夏众鑫运输有限公司',
+        type: '毒害品',
+        description: '甲醇',
+        tonnage: '27吨'
       }
-
       ],
       title: '',
       newList: [], // 数据
@@ -361,7 +377,7 @@ export default {
           {
             name: '车辆上线情况',
             type: 'pie',
-            radius: ['50%', '100%'],
+            radius: ['50%', '80%'],
             avoidLabelOverlap: false,
             label: {
               show: false,
@@ -408,6 +424,9 @@ export default {
         },
         yAxis: {
           type: 'value'
+        },
+        grid: {
+          left: '15%'
         },
         textStyle: {
           color: '#fff'
@@ -555,6 +574,31 @@ export default {
             name: '昨日里程',
             type: 'pie',
             radius: '100%',
+            label: { //饼图图形上的文本标签
+              normal: {
+                formatter(v) {
+                  let text = v.name
+                  if (text.length <= 3) {
+                    return text;
+                  } else if (text.length > 3 && text.length <= 8) {
+                    return text = `${text.slice(0, 3)}\n${text.slice(3)}`
+                  } else if (text.length > 8 && text.length <= 16) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8)}`
+                  } else if (text.length > 16 && text.length <= 24) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16)}`
+                  } else if (text.length > 24 && text.length <= 30) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24)}`
+                  } else if (text.length > 30) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}`
+                  }
+                },
+                textStyle: {
+                  fontWeight: 1000, //文字的粗线
+                  fontSize: 15,    //文字的字体大小
+                  color: '#fff'
+                },
+              }
+            },
             data: [
               {value: 1048, name: '100公里以下'},
               {value: 735, name: '100-200公里'},
@@ -563,13 +607,6 @@ export default {
               {value: 300, name: '1000-1500公里'},
               {value: 484, name: '超过1500公里'},
             ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
           }
         ]
       }
@@ -609,19 +646,19 @@ export default {
       for (let i = 0; i < this.amapCoordinate.length; i++) {
         switch (this.amapCoordinate[i].type) {
           case "危货":
-            this.iconStyle.push("&#xe723;")
+            this.iconStyle.push("&#xe60e;")
             break;
           case "普货" :
-            this.iconStyle.push("&#xe691;")
+            this.iconStyle.push("&#xe60e;")
             break;
           case "客运":
-            this.iconStyle.push("&#xe66b;")
+            this.iconStyle.push("&#xe60e;")
             break;
           case "公交":
-            this.iconStyle.push("&#xe660;")
+            this.iconStyle.push("&#xe60e;")
             break;
           case "出租车":
-            this.iconStyle.push("&#xe722;")
+            this.iconStyle.push("&#xe60e;")
             break;
         }
       }
@@ -660,12 +697,6 @@ export default {
           }
         ]
       }
-      // this.options.xAxis.data = ['生理疲劳', '抽烟', '打电话', '分神驾驶', '驾驶员异常','其他报警']
-      // this.options.series =  {
-      //   name: '报警总数',
-      //   type: 'bar',
-      //   data: [1150, 105, 110, 100, 100]
-      // }
       this.getEchartData1()
     },
     getmounted() {
@@ -755,17 +786,16 @@ export default {
 #particles-js {
   width: 99%;
   // height: calc(100% - 100px);
-  height: 95%;
+  height: 99%;
   position: absolute;
 }
 
 .home {
   width: 100%;
-  min-width: 1904px;
-  height: 911px;
-  background: #00065b url(../img/bg.jpg) no-repeat 0 0;
+  height: 100vh;
+  background: #00065b url(../img/bg.jpg) no-repeat;
   overflow: hidden;
-  background-size: cover;
+  background-size: 100% 100%;
   margin: 0;
   padding: 0;
   border: none;
@@ -773,7 +803,7 @@ export default {
 
   .head {
     width: 100%;
-    height: 80px;
+    height: 8vh;
     display: flex;
     justify-content: space-between;
     margin-bottom: 2%;
@@ -811,7 +841,7 @@ export default {
 
   .summary {
     width: 96%;
-    height: 87%;
+    height: 100%;
     display: flex;
     justify-content: space-between;
     margin: -1% auto;
@@ -820,7 +850,6 @@ export default {
     .operate {
       width: 22%;
       height: 100%;
-      background-size: cover;
       //font-family: "Impact";
 
       .border {
@@ -828,30 +857,32 @@ export default {
         height: 20%;
         //border: 1px solid #00c2fd;
         background: url(../img/border.png) no-repeat;
-        background-size: cover;
-        padding-top: 10%;
+        background-size: 99% 100%;
+        padding-top: 5%;
         padding-left: 5%;
         margin-bottom: 5%;
         position: relative;
 
         .enterprise {
           width: 100%;
-          font-size: 15px;
-          line-height: 30px;
+          font-size: 2vh;
+          line-height: 5vh;
           color: #00c2fd;
-          //margin-left: 5%;
           margin-top: 1%;
+          font-weight: bolder;
 
           .number {
             width: 70%;
+            height: 5%;
             margin-right: 5%;
 
             .total {
-              width: 19%;
+              width: 20%;
               color: white;
               text-align: center;
+              line-height: 5vh;
               margin-left: 1%;
-              font-size: 25px;
+              font-size: 3vh;
               background: #00c3ed;
               border-radius: 5px;
             }
@@ -861,9 +892,9 @@ export default {
 
       .vehicles {
         width: 95%;
-        height: 26%;
-        background: url(../img/vehicles.png) no-repeat;
-        background-size: cover;
+        height: 25%;
+        background: url(../img/vehicles.png) no-repeat 0 0;
+        background-size: 99% 100%;
         color: white;
         padding-top: 5%;
         padding-left: 5%;
@@ -875,13 +906,14 @@ export default {
           //background: red;
           table {
             width: 100%;
-            height: 90%;
+            height: 23vh;
             text-align: center;
             border: 1px solid #00c2fd;
             border-collapse: collapse;
 
             th {
               width: 50%;
+              font-size: 1.5vh;
               background: #00c2fd;
             }
           }
@@ -891,10 +923,10 @@ export default {
 
       .police {
         width: 97%;
-        height: 41%;
+        height: 32%;
         color: white;
         background: url("../img/police.png") no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
         padding-top: 3%;
         position: relative;
         //margin-top: 30%;
@@ -929,10 +961,11 @@ export default {
       height: 100%;
 
       .roll {
-        height: 25%;
+        height: 22%;
         overflow: hidden;
         background: url("../img/roll.png") no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
+
 
         ::v-deep .el-table {
           width: 90%;
@@ -940,6 +973,7 @@ export default {
           height: 100%;
           background: transparent;
           color: white;
+          position: inherit;
 
           .el-table__body-wrapper::-webkit-scrollbar {
             /*width: 0;宽度为0隐藏*/
@@ -968,10 +1002,10 @@ export default {
 
       .mileage {
         width: 100%;
-        height: 24%;
+        height: 20%;
         margin-bottom: 1%;
         background: url("../img/mileage.png") no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
 
         h2 {
           margin-top: 0;
@@ -979,18 +1013,13 @@ export default {
         }
 
         .vehicle-mileage {
-          width: 35%;
+          width: 45%;
           height: 100%;
-
-          //#yesterday-mileage {
-          //  width: 100%;
-          //  height: 95%;
-          //}
         }
       }
 
       .kilometre {
-        width: 35%;
+        width: 50%;
         color: white;
 
         span {
@@ -1005,9 +1034,9 @@ export default {
 
       .map {
         width: 100%;
-        height: 50%;
+        height: 42%;
         background: url(../img/amap.png) no-repeat;
-        background-size: 100%;
+        background-size: 99% 100%;
         margin-bottom: 1%;
         position: relative;
 
@@ -1051,24 +1080,25 @@ export default {
     .property {
       width: 22%;
       height: 100%;
-      background-size: cover;
       color: white;
 
 
       .security {
 
         width: 100%;
-        height: 25%;
+        height: 22%;
         background: url(../img/security.png) no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
         margin-bottom: 5%;
+        position: relative;
 
         .early-warning {
+          width: 98%;
           border-bottom: 1px dashed white;
 
           .active-safety {
             width: 50%;
-            padding-bottom: 3%;
+            padding-bottom: 1%;
             border-right: 1px dashed white;
           }
 
@@ -1098,9 +1128,9 @@ export default {
 
       .suspected-faulty-vehicle {
         width: 100%;
-        height: 29%;
+        height: 25%;
         background: url(../img/suspected-faulty-vehicle.png) no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
         padding-top: 3%;
         margin-bottom: 5%;
 
@@ -1112,9 +1142,9 @@ export default {
 
       .risk {
         width: 100%;
-        height: 40%;
+        height: 33%;
         background: url(../img/risk.png) no-repeat;
-        background-size: cover;
+        background-size: 99% 100%;
         //margin-top: 5%;
         padding-top: 3%;
 
@@ -1137,7 +1167,7 @@ export default {
 
 .align {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 1vh;
 }
 
 //
