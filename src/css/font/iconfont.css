@@ -1,0 +1,37 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3640822 */
+  src: url('@/css/font/iconfont.woff2') format('woff2'),
+  url('@/css/font/iconfont.woff') format('woff'),
+  url('@/css/font/iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-lahuoche:before {
+  content: "\e60e";
+  font-size: 50px;
+  color: red;
+}
+
+.icon-zuoyebaojing:before {
+  content: "\e63d";
+}
+
+.icon-anquan:before {
+  content: "\e6f3";
+  color: #90cb75;
+  font-size: 5.5vh;
+}
+
+.icon-zuoyebaojing-copy:before {
+  content: "\e6f4";
+  color: #ed6666;
+  font-size: 5.5vh;
+}
+
