@@ -11,4 +11,7 @@
   padding: 0;
 }
 
+body {
+  margin: 0;
+}
 </style>

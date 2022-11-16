@@ -28,7 +28,7 @@
 
         hoverMode="grab"
 
-        :clickEffect="true"
+        :clickEffect="false"
 
         clickMode="push" class="cash"
     >
@@ -80,14 +80,14 @@
           </div>
         </div>
         <div class="police">
-          <div class="flex around">
+          <div>
             <div class="font">{{ this.name }}</div>
-            <div class="distribution">
-              <button @click="ap(index)" :id="index" v-for="(item,index) in this.button_id" :key="index">{{
-                  item
-                }}
-              </button>
-            </div>
+            <!--            <div class="distribution">-->
+            <!--              <button @click="ap(index)" :id="index" v-for="(item,index) in this.button_id" :key="index">{{-->
+            <!--                  item-->
+            <!--                }}-->
+            <!--              </button>-->
+            <!--            </div>-->
           </div>
           <div id="chart1"></div>
         </div>
@@ -469,12 +469,12 @@ export default {
           {
             name: '报警总数',
             type: 'bar',
-            data: [1, 0, 0, 0, 0],
+            data: [150, 105, 110, 100, 100]
           },
           {
             name: '已处理',
             type: 'bar',
-            data: [1, 0, 0, 0, 0],
+            data: [220, 82, 100, 100, 63]
           }
         ]
       },
@@ -766,10 +766,9 @@ export default {
     autoscroll() {
       const table = this.$refs.table
       const divData = table.bodyWrapper
-      console.log(table);
       setInterval(() => {
         divData.scrollTop += 1
-        if (divData.clientHeight + divData.scrollTop === divData.scrollHeight) {
+        if (divData.clientHeight + divData.scrollTop === divData.scrollHeight || divData.clientHeight + divData.scrollTop === divData.scrollHeight - 1) {
           divData.scrollTop = 0
         }
       }, 30)
@@ -819,6 +818,8 @@ export default {
 
     h1 {
       color: white;
+      line-height: 0vh;
+
     }
 
     .right {
