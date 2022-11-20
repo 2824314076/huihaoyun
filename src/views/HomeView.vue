@@ -118,13 +118,14 @@
             <amap
                 id="AmapMar"
                 ref="centerMap"
+                :center="this.marker"
             >
-              <amap-map-type/>
+<!--              <amap-map-type/>-->
               <!--              <amap-district-layer-province />-->
-              <div v-for="(item,index) in amapCoordinate">
+              <div v-for="(item,index) in tableData">
                 <amap-marker
                     :key="index"
-                    :position="item.position"
+                    :position="item.marker"
                     auto-move
                     is-custom
                 >
@@ -135,18 +136,22 @@
                   >
                     <table style="width: 100%;text-align: center;" cellspacing="0" border="1">
                       <tr>
-                        <th>姓名</th>
+                        <th>司机姓名</th>
                         <th>车牌号</th>
-                        <th>出发地</th>
-                        <th>到达地</th>
-                        <th>货物类型</th>
+                        <th>归属地</th>
+                        <th>所属业户</th>
+                        <th>货物种类</th>
+                        <th>货物名称</th>
+                        <th>货物吨数</th>
                       </tr>
                       <tr>
-                        <td>{{ item.name }}</td>
-                        <td>{{ item.license }}</td>
-                        <td>{{ item.departure }}</td>
-                        <td>{{ item.destination }}</td>
+                        <td >{{ item.name }}</td>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.Belonging }}</td>
                         <td>{{ item.type }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.tonnage }}</td>
                       </tr>
                     </table>
                     <div slot="reference" class="icon iconfont" style="color: red" v-html="iconStyle[index]">
@@ -195,6 +200,7 @@
               :data="tableData"
               height="99%"
               ref="table"
+              @row-click="Tablemap"
               :header-cell-style="{
                 background: '#00065CFF',
                 color: '#fff',
@@ -266,11 +272,11 @@
           </div>
         </div>
         <div class="suspected-faulty-vehicle">
-          <div class="left">驾驶异常报警分布</div>
+          <div class="left">驾驶员异常报警分布</div>
           <div id="suspected-fault"></div>
         </div>
         <div class="risk">
-          <div class="left">近30日风险趋势</div>
+          <div class="left">疫情风险趋势</div>
           <div id="risk-trend"></div>
         </div>
       </div>
@@ -289,78 +295,87 @@ export default {
   },
   data() {
     return {
-      amapCoordinate: [
-        {
-          position: [116.464258, 39.999067],
-          name: '李默',
-          license: '宁AS5313',
-          departure: '宁夏',
-          destination: "北京",
-          type: '普货',
-        },
-        {
-          position: [106.567821, 38.192319],
-          name: '秦放',
-          license: '宁C32761',
-          departure: '宁夏',
-          destination: "上海",
-          type: '危货',
-        },
-      ],
+      // amapCoordinate: [
+      //   {
+      //     marker: [106.678210, 38.192319],
+      //     date: '宁AK2600',
+      //     name: '秦放',
+      //     address: '宁夏回族自治区',
+      //     Belonging: '宁夏众鑫运输有限公司',
+      //     type: '腐蚀品',
+      //     goods:'危货',
+      //     description: '五氧化二磷',
+      //     tonnage: '10吨'
+      //   },
+      // ],
       tableData: [{
+        marker:[106, 38],
         date: '宁AK2600',
-        name: '李文华',
+        name: '秦放',
         address: '宁夏回族自治区',
         Belonging: '宁夏众鑫运输有限公司',
+        goods:'危货',
         type: '腐蚀品',
         description: '五氧化二磷',
         tonnage: '10吨'
       }, {
+        marker:[106.7821, 38.1919],
         date: '宁AG8205',
         name: '罗致',
         address: '宁夏回族自治区',
         Belonging: '宁夏众鑫运输有限公司',
         type: '第七类',
+        goods:'危货',
         description: '海洋污染物',
         tonnage: '13吨'
       }, {
+        marker:[106.567, 38.192],
         date: '宁AB9991',
         name: '王鑫',
         address: '宁夏回族自治区',
         Belonging: '宁夏孚惠工贸有限公司',
+        goods:'危货',
         type: '爆炸品',
         description: '液态二氧化碳',
         tonnage: '8吨'
       }, {
+        marker:[107.567821, 32.192319],
         date: '宁AL0897',
         name: '张猛',
         address: '宁夏回族自治区',
         Belonging: '宁夏众鑫运输有限公司',
+        goods:'危货',
         type: '易燃物',
         description: '甲烷',
         tonnage: '20吨'
       }, {
+        marker:[110, 38.192319],
         date: '宁AM9098',
         name: '褚宇',
         address: '宁夏回族自治区',
         Belonging: '	宁夏孚惠工贸有限公司',
+        goods:'危货',
         type: '放射线物',
         description: '二氧化镅',
         tonnage: '26吨'
       }, {
+        marker:[100, 30],
         date: '宁AJ8338',
         name: '李兴浩',
         address: '宁夏回族自治区',
         Belonging: '宁夏众鑫运输有限公司',
+        goods:'危货',
         type: '氧化剂',
         description: '氯酸钾',
         tonnage: '30吨'
       }, {
+        marker:[92, 40],
         date: '宁AL0875',
         name: '张浩',
         address: '宁夏回族自治区',
         Belonging: '宁夏众鑫运输有限公司',
         type: '毒害品',
+        goods:'危货',
         description: '甲醇',
         tonnage: '27吨'
       }
@@ -617,7 +632,7 @@ export default {
         车辆总数: [0, 0, 0, 1, 9, 3]
       },
       button_id: ['今日报警分布', '驾驶异常分布'],
-      name: '今日报警分布',
+      name: '车辆报警分布',
       travel: [
         {
           title: '车辆',
@@ -633,7 +648,7 @@ export default {
         }
       ],
       map: null,
-      marker: [],
+      marker: [106.567821, 38.192319],
       iconStyle: [],
     }
   },
@@ -643,8 +658,8 @@ export default {
   methods: {
     iconColor() {
       // this.iconStyle = []
-      for (let i = 0; i < this.amapCoordinate.length; i++) {
-        switch (this.amapCoordinate[i].type) {
+      for (let i = 0; i < this.tableData.length; i++) {
+        switch (this.tableData[i].goods) {
           case "危货":
             this.iconStyle.push("&#xe60e;")
             break;
@@ -662,6 +677,11 @@ export default {
             break;
         }
       }
+    },
+    Tablemap(row){
+      this.marker=row.marker
+      this.amapCoordinate[0] = row
+      // this.amapCoordinate.add(row)
     },
     ap(id) {
       this.name = document.getElementById(id).innerHTML
@@ -1022,6 +1042,7 @@ export default {
       .kilometre {
         width: 50%;
         color: white;
+        text-align: center;
 
         span {
           font-size: 3vh;
