@@ -110,9 +110,10 @@
         </div>
         <div class="map">
           <div class="statistics">
-            <div>车辆总数：193</div>
-            <div>在线数量：160</div>
-            <div>离线数量：33</div>
+            <div v-for="(item,index) in totaldata" :key="index">{{ index | filtertotal }}：{{ item }}</div>
+<!--            <div>在线数量：160</div>-->
+<!--            <div>离线数量：33</div>-->
+<!--            <div>{{this.totaldata}}</div>-->
           </div>
           <div class="amap-example">
             <amap
@@ -288,6 +289,7 @@
 import HelloWorld from '@/components/HelloWorld.vue'
 import "../css/font/iconfont.css"
 
+
 export default {
   name: 'HomeView',
   components: {
@@ -308,6 +310,7 @@ export default {
       //     tonnage: '10吨'
       //   },
       // ],
+      totaldata:{},
       tableData: [{
         marker:[106, 38],
         date: '宁AK2600',
@@ -541,7 +544,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 10, 18, 30, 33, 33, 31, 32, 29, 26, 26, 30, 24, 23, 28, 31, 24, 20, 24, 23, 24]
+            data: [0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 10, 18, 30, 33, 33, 31, 32, 29, 26, 26, 30, 24, 23, 28, 31, 24]
           },
           {
             name: '中风险',
@@ -558,7 +561,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 6, 5, 5, 4, 1, 3, 5, 5, 5, 3, 8, 8, 1, 4, 10, 9, 8]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 6, 5, 5, 4, 1, 3, 5, 5, 5, 3, 8, 8, 1]
           },
           {
             name: '低风险',
@@ -575,7 +578,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 26, 38, 44, 42, 46, 45, 40, 35, 35, 41, 39, 38, 39, 45, 40, 35, 41, 41, 44]
+            data: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 26, 38, 44, 42, 46, 45, 40, 35, 35, 41, 39, 38, 39, 45, 40]
           }
         ]
       },
@@ -627,9 +630,9 @@ export default {
       }
       ,
       totals: {
-        企业总数: [0, 0, 0, 0, 0, 3],
-        个体总数: [0, 0, 0, 0, 0, 0],
-        车辆总数: [0, 0, 0, 1, 9, 3]
+        企业总数: '000003',
+        车辆总数: '000200',
+        运营商总数: '000001',
       },
       button_id: ['今日报警分布', '驾驶异常分布'],
       name: '车辆报警分布',
@@ -651,6 +654,17 @@ export default {
       marker: [106.567821, 38.192319],
       iconStyle: [],
     }
+  },
+  filters:{
+    filtertotal(data){
+      if (data == 'offline'){
+        return '离线车辆'
+      }else  if (data == 'total'){
+        return '车辆总数'
+      }else if(data == 'online'){
+        return '在线车辆'
+      }
+    },
   },
   mounted() {
     this.getmounted()
@@ -727,6 +741,18 @@ export default {
       this.getEchartvehicle()
       this.autoscroll()
       this.iconColor()
+      this.gettotal()
+    },
+    gettotal(){
+      let that = this
+      let  Authorization = 'Bearer cb8e6308-e86a-4ba9-a6e9-ef33078120b7'
+      this.$axios.get('http://222.75.204.3:8081/basic/dashboard-set/vehicle/count?regionCode=640181', {headers: {Authorization: Authorization}}).then(function (res){
+        that.totaldata = res.data.data
+        that.totals.车辆总数 = res.data.data.total.toString().splice(6,'0')
+        console.log(res.data.data)
+      }).catch(function (err){
+
+      })
     },
     getEchartData() {
       const myChart = this.$echarts.init(document.getElementById('chart'));
@@ -895,7 +921,7 @@ export default {
           .number {
             width: 70%;
             height: 5%;
-            margin-right: 5%;
+            margin-right: 2%;
 
             .total {
               width: 20%;

@@ -1,19 +1,19 @@
 import Vue from 'vue'
+import App from './App.vue'
 import axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import * as echarts from 'echarts';
 import VueParticles from 'vue-particles'
-
 Vue.prototype.$echarts = echarts
 import AmapVue from '@amap/amap-vue'
-import App from './App.vue'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/style.css'
 import router from './router'
 import store from './store'
 import "./request/interceptor.js";
 
+Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
 AmapVue.config.version = '2.0'; // 默认2.0，这里可以不修改
