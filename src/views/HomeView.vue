@@ -37,7 +37,7 @@
     <div class="head">
       <div class="left">
         <el-button class="button" @click="opens('http://222.75.204.3:8081/#/login')">监管平台</el-button>
-        <el-button class="button" @click="opens('http://aimonitoring.rybsj.cn/webgis/login.jsp')">危货运输</el-button>
+        <el-button class="button" @click="opens('https://aimonitoring.rybsj.cn/webgis/login.jsp')">危货运输</el-button>
         <el-button class="button" @click="opens('https://pc.huihaoyun.cn/login.html?v=1324/')">普货运输</el-button>
       </div>
       <div>
@@ -98,9 +98,10 @@
           <h2 style="text-align: center;color: white;">车辆行驶里程风险</h2>
           <div class="flex around" style="height: 90%">
             <div class="kilometre">
-              <div v-for="(item,index) in this.travel" :key="index">{{ item.title }}安全行驶累计里程 <span>{{
-                  item.num
-                }}</span> 公里
+              <div v-for="(item,index) in this.travel" :key="index" style="text-align:center">{{ item.title }}安全行驶累计里程
+                <span>{{
+                    item.num
+                  }}</span> 公里
               </div>
             </div>
             <div class="vehicle-mileage">
@@ -110,10 +111,11 @@
         </div>
         <div class="map">
           <div class="statistics">
-            <div v-for="(item,index) in totaldata" :key="index">{{ index | filtertotal }}：{{ item }}</div>
-<!--            <div>在线数量：160</div>-->
-<!--            <div>离线数量：33</div>-->
-<!--            <div>{{this.totaldata}}</div>-->
+            <div v-for="(item,index) in totaldata">
+              <div>{{ index | filtertotal }}：{{ item }}</div>
+              <!--             <div>在线数量：160</div>-->
+              <!--             <div>离线数量：40</div>-->
+            </div>
           </div>
           <div class="amap-example">
             <amap
@@ -121,7 +123,7 @@
                 ref="centerMap"
                 :center="this.marker"
             >
-<!--              <amap-map-type/>-->
+              <!--              <amap-map-type/>-->
               <!--              <amap-district-layer-province />-->
               <div v-for="(item,index) in tableData">
                 <amap-marker
@@ -259,15 +261,15 @@
           </div>
           <div class="flex around align intelligence">
             <div>
-              <div class="high-risk">51</div>
+              <div class="high-risk">28</div>
               <div>高风险</div>
             </div>
             <div>
-              <div class="medium-risk">24</div>
+              <div class="medium-risk">8</div>
               <div>中风险</div>
             </div>
             <div>
-              <div class="low-risk">13</div>
+              <div class="low-risk">38</div>
               <div>低风险</div>
             </div>
           </div>
@@ -277,7 +279,7 @@
           <div id="suspected-fault"></div>
         </div>
         <div class="risk">
-          <div class="left">疫情风险趋势</div>
+          <div class="left">当月疫情风险趋势</div>
           <div id="risk-trend"></div>
         </div>
       </div>
@@ -286,14 +288,12 @@
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld.vue'
 import "../css/font/iconfont.css"
-
+import axios from "axios"
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
   },
   data() {
     return {
@@ -310,7 +310,6 @@ export default {
       //     tonnage: '10吨'
       //   },
       // ],
-      totaldata:{},
       tableData: [{
         marker:[106, 38],
         date: '宁AK2600',
@@ -544,7 +543,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 10, 18, 30, 33, 33, 31, 32, 29, 26, 26, 30, 24, 23, 28, 31, 24]
+            data: []
           },
           {
             name: '中风险',
@@ -561,7 +560,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 7, 6, 5, 5, 4, 1, 3, 5, 5, 5, 3, 8, 8, 1]
+            data: []
           },
           {
             name: '低风险',
@@ -578,7 +577,7 @@ export default {
             emphasis: {
               focus: 'series'
             },
-            data: [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 26, 38, 44, 42, 46, 45, 40, 35, 35, 41, 39, 38, 39, 45, 40]
+            data: []
           }
         ]
       },
@@ -633,6 +632,7 @@ export default {
         企业总数: '000003',
         车辆总数: '000200',
         运营商总数: '000001',
+
       },
       button_id: ['今日报警分布', '驾驶异常分布'],
       name: '车辆报警分布',
@@ -653,21 +653,28 @@ export default {
       map: null,
       marker: [106.567821, 38.192319],
       iconStyle: [],
+      totaldata: {
+        total: 200,
+        online: 154,
+        offline: 46,
+      },
+      access_token: '',
+      refresh_token: ''
     }
-  },
-  filters:{
-    filtertotal(data){
-      if (data == 'offline'){
-        return '离线车辆'
-      }else  if (data == 'total'){
-        return '车辆总数'
-      }else if(data == 'online'){
-        return '在线车辆'
-      }
-    },
   },
   mounted() {
     this.getmounted()
+  },
+  filters: {
+    filtertotal(data) {
+      if (data == 'offline') {
+        return '离线车辆'
+      } else if (data == 'total') {
+        return '车辆总数'
+      } else if (data == 'online') {
+        return '在线车辆'
+      }
+    },
   },
   methods: {
     iconColor() {
@@ -694,72 +701,19 @@ export default {
     },
     Tablemap(row){
       this.marker=row.marker
-      this.amapCoordinate[0] = row
-      // this.amapCoordinate.add(row)
-    },
-    ap(id) {
-      this.name = document.getElementById(id).innerHTML
-      // console.log(this.option.series[0].name)
-      // this.options.series[0].name = '123'
-      // this.options.series[1].name = '13'
-      if (id == 0) {
-        this.options.xAxis.data = ['超速报警', '疲劳驾驶', '2-5时禁驾', '偏离路线', '其他报警']
-        this.options.series = [
-          {
-            name: '报警总数',
-            type: 'bar',
-            data: [150, 105, 110, 100, 100]
-          },
-          {
-            name: '已处理',
-            type: 'bar',
-            data: [220, 82, 100, 100, 63]
-          }
-        ]
-      } else if (id == 1) {
-        this.options.xAxis.data = ['生理疲劳', '抽烟', '打电话', '分神驾驶', '驾驶员异常', '其他报警']
-        this.options.series = [
-          {
-            name: '报警总数',
-            type: 'bar',
-            data: [1250, 1205, 1120, 1020, 1200, 500]
-          },
-          {
-            name: '已处理',
-            type: 'bar',
-            data: [2210, 812, 1010, 1010, 613, 1000]
-          }
-        ]
-      }
-      this.getEchartData1()
     },
     getmounted() {
       this.getEchartData()
       this.getEchartData1()
       this.getEchartfaulty()
-      this.getEcharttrend()
+      this.getTime()
       this.getEchartvehicle()
       this.autoscroll()
       this.iconColor()
-      this.gettotal()
-    },
-    gettotal(){
-      let that = this
-      let  Authorization = 'Bearer cb8e6308-e86a-4ba9-a6e9-ef33078120b7'
-      this.$axios.get('http://222.75.204.3:8081/basic/dashboard-set/vehicle/count?regionCode=640181', {headers: {Authorization: Authorization}}).then(function (res){
-        that.totaldata = res.data.data
-        that.totals.车辆总数 = res.data.data.total.toString().splice(6,'0')
-        console.log(res.data.data)
-      }).catch(function (err){
-
-      })
+      this.config()
     },
     getEchartData() {
       const myChart = this.$echarts.init(document.getElementById('chart'));
-      const seriesLabel = {
-        show: true
-      };
-
       myChart.setOption(this.option);
       window.addEventListener("resize", function () {
         myChart.resize()
@@ -768,9 +722,6 @@ export default {
     },
     getEchartData1() {
       let myChart = this.$echarts.init(document.getElementById('chart1'));
-      const seriesLabel = {
-        show: true
-      };
       myChart.setOption(this.options);
       window.addEventListener("resize", function () {
         myChart.resize()
@@ -778,21 +729,28 @@ export default {
     },
     getEchartfaulty() {
       let myChart = this.$echarts.init(document.getElementById('suspected-fault'));
-      const seriesLabel = {
-        show: true
-      };
-
       myChart.setOption(this.faulty);
       window.addEventListener("resize", function () {
         myChart.resize()
       })
     },
+    getTime() {
+      let data = [
+        [39, 89, 6, 93, 33, 25, 31, 30, 67, 35, 58, 100, 72, 44, 73, 66, 8, 0, 10, 68, 1, 55, 60, 14, 61, 84, 87, 80, 71, 82, 92],
+        [34, 8, 23, 33, 42, 41, 28, 1, 47, 14, 32, 9, 14, 7, 32, 17, 12, 6, 26, 4, 18, 20, 18, 12, 38, 35, 49, 9, 43, 40, 11],
+        [35, 39, 93, 67, 47, 98, 19, 32, 42, 23, 48, 15, 85, 57, 90, 77, 41, 65, 83, 16, 80, 82, 30, 33, 34, 58, 44, 53, 40, 25, 89],
+      ]
+      let date = new Date()
+      let day = date.getDate()
+      for (let i = 0; i < this.trend.series.length; i++) {
+        for (let j = 0; j < day; j++) {
+          this.trend.series[i].data.push(data[i][j])
+        }
+      }
+      this.getEcharttrend()
+    },
     getEcharttrend() {
       let myChart = this.$echarts.init(document.getElementById('risk-trend'));
-      const seriesLabel = {
-        show: true
-      };
-
       myChart.setOption(this.trend);
       window.addEventListener("resize", function () {
         myChart.resize()
@@ -800,15 +758,80 @@ export default {
     },
     getEchartvehicle() {
       let myChart = this.$echarts.init(document.getElementById('yesterday-mileage'));
-      const seriesLabel = {
-        show: true
-      };
-
       myChart.setOption(this.vehicle_running);
       window.addEventListener("resize", function () {
         myChart.resize()
       })
     },
+    gettotal() {
+      let that = this
+      this.$axios.get(
+          'http://222.75.204.3:8081/basic/dashboard-set/vehicle/count?regionCode=640181',
+          {
+            headers:
+                {
+                  Authorization: that.access_token
+                }
+          }
+      ).then(function (res) {
+        that.totaldata.total = res.data.data.total
+        that.totaldata.online = res.data.data.online
+        that.totaldata.offline = res.data.data.offline
+        that.totals.车辆总数 = res.data.data.total.toString().splice(6, '0')
+        console.log(that.totals.车辆总数)
+      }).catch(function (err) {
+
+      })
+    },
+    config() {
+      let that = this
+      let Authorization = 'Basic dGVzdDp0ZXN0'
+      this.$axios.post(
+          'http://222.75.204.3:8081/auth/oauth/token?username=admin&password=9894%2B9Yxne9Lhe3Hz%2BWvQQ%3D%3D&grant_type=password&scope=server',
+          {}, {
+            headers:
+                {
+                  Authorization: Authorization
+                }
+          }
+      ).then(function (res) {
+        console.log(res.data)
+        that.access_token = res.data.token_type + ' ' + res.data.access_token
+        that.refresh_token = res.data.token_type + ' ' + res.data.refresh_token
+        that.gettotal()
+      }).catch(function (err) {
+        console.log(err, '错误')
+      })
+    },
+    // risk(){
+    //   // let that = this
+    //   // let time = new Date()
+    //   // let startDate = time.getDate().toString().padStart(2,'0')
+    //   // let startMonth = (time.getMonth() + 1).toString().padStart(2,'0')
+    //   // let startYear = time.getFullYear()
+    //   // let content = 'application/json;charset=UTF-8'
+    //   // let startTime = startYear + '-' + startMonth + '-' + startDate +' 00:00:00'
+    //   // let endTime = startYear + '-' + startMonth + '-' + startDate +' 23:59:59'
+    //   //   axios.post('http://222.75.204.3:8081/report/vehicleWarn/risk',
+    //   //       {
+    //   //         current:'1',
+    //   //         size:'1000',
+    //   //         startTime: startTime,
+    //   //         endTime: endTime
+    //   //       },
+    //   //       {
+    //   //         headers:{
+    //   //           'Content-Type':content,
+    //   //           Authorization:that.access_token,
+    //   //         }
+    //   //       }
+    //   //   ).then(function (res){
+    //   //     // for (let i = 0; i < res.data.data.records.length; i++) {
+    //   //     //   if ()
+    //   //     // }
+    //   //     // console.log(res)
+    //   // })
+    // },
     autoscroll() {
       const table = this.$refs.table
       const divData = table.bodyWrapper
@@ -864,7 +887,7 @@ export default {
 
     h1 {
       color: white;
-      line-height: 0vh;
+      line-height: 0;
 
     }
 
