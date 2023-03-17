@@ -36,12 +36,12 @@
     <!--  按钮  -->
     <div class="head">
       <div class="left">
-        <el-button class="button" @click="opens('http://222.75.204.3:8081/#/login')">监管平台</el-button>
-        <el-button class="button" @click="opens('https://aimonitoring.rybsj.cn/webgis/login.jsp')">危货运输</el-button>
+        <el-button class="button" @click="opens('http://222.75.204.3:8081/#/login')">管理平台</el-button>
+        <el-button class="button" @click="opens('http://222.75.204.17:12503/webgis/login.jsp')">危货运输</el-button>
         <el-button class="button" @click="opens('https://pc.huihaoyun.cn/login.html?v=1324/')">普货运输</el-button>
       </div>
       <div>
-        <h1>宁东物流大数据监管平台</h1>
+        <h1>{{ this.titlename }}</h1>
       </div>
       <div class="right">
         <el-button class="button" @click="opens()">公铁联运</el-button>
@@ -56,11 +56,11 @@
           <div class="auto" v-for="(item,index) in totals" :key="index">
             <div class="enterprise flex">
               <div class="number flex">
-                <div class="total" v-for="(ite,ind) in item" :key="ind">
-                  <div>{{ ite }}</div>
+                <div v-for="(ite,ind) in ('000000'+ item.number).slice(-6)" :key="ind" class="total">
+                  <div>{{ ("0" + ite).slice(-1) }}</div>
                 </div>
               </div>
-              <div>{{ index }}</div>
+              <div>{{ item.name }}</div>
             </div>
           </div>
         </div>
@@ -82,12 +82,6 @@
         <div class="police">
           <div>
             <div class="font">{{ this.name }}</div>
-            <!--            <div class="distribution">-->
-            <!--              <button @click="ap(index)" :id="index" v-for="(item,index) in this.button_id" :key="index">{{-->
-            <!--                  item-->
-            <!--                }}-->
-            <!--              </button>-->
-            <!--            </div>-->
           </div>
           <div id="chart1"></div>
         </div>
@@ -95,13 +89,14 @@
       <!--  地图  -->
       <div class="analysis">
         <div class="mileage">
-          <h2 style="text-align: center;color: white;">车辆行驶里程风险</h2>
+          <h2 style="text-align: center;color: white;">报警情况</h2>
           <div class="flex around" style="height: 90%">
-            <div class="kilometre">
-              <div v-for="(item,index) in this.travel" :key="index" style="text-align:center">{{ item.title }}安全行驶累计里程
-                <span>{{
-                    item.num
-                  }}</span> 公里
+            <div class="kilometre" style="display: flex;flex-wrap: wrap;justify-content: end">
+              <div v-for="(item,index) in this.alarm" :key="index"
+                   style="width: 30%;line-height:3.1vh;;margin-left:1%;text-align: center">
+                <div style="background: #00c2fd;">
+                  <div>{{ item.x }}:{{ item.value }}辆</div>
+                </div>
               </div>
             </div>
             <div class="vehicle-mileage">
@@ -164,6 +159,7 @@
               </div>
 
             </amap>
+            <!--            <about />-->
           </div>
           <div class="vehicle">
             <div>
@@ -290,26 +286,15 @@
 <script>
 import "../css/font/iconfont.css"
 import axios from "axios"
+import about from "@/views/AboutView"
 
 export default {
   name: 'HomeView',
   components: {
+    about
   },
   data() {
     return {
-      // amapCoordinate: [
-      //   {
-      //     marker: [106.678210, 38.192319],
-      //     date: '宁AK2600',
-      //     name: '秦放',
-      //     address: '宁夏回族自治区',
-      //     Belonging: '宁夏众鑫运输有限公司',
-      //     type: '腐蚀品',
-      //     goods:'危货',
-      //     description: '五氧化二磷',
-      //     tonnage: '10吨'
-      //   },
-      // ],
       tableData: [{
         marker:[106, 38],
         date: '宁AK2600',
@@ -581,59 +566,18 @@ export default {
           }
         ]
       },
-      vehicle_running: {
-        tooltip: {
-          trigger: 'item',
-          formatter: '{b} : 有{c}辆 '
+      totals: [
+        {
+          name: '企业总数',
+          number: '19'
+        }, {
+          name: '车辆总数',
+          number: '19'
+        }, {
+          name: '运营商总数',
+          number: '1'
         },
-        series: [
-          {
-            name: '昨日里程',
-            type: 'pie',
-            radius: '100%',
-            label: { //饼图图形上的文本标签
-              normal: {
-                formatter(v) {
-                  let text = v.name
-                  if (text.length <= 3) {
-                    return text;
-                  } else if (text.length > 3 && text.length <= 8) {
-                    return text = `${text.slice(0, 3)}\n${text.slice(3)}`
-                  } else if (text.length > 8 && text.length <= 16) {
-                    return text = `${text.slice(0, 8)}\n${text.slice(8)}`
-                  } else if (text.length > 16 && text.length <= 24) {
-                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16)}`
-                  } else if (text.length > 24 && text.length <= 30) {
-                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24)}`
-                  } else if (text.length > 30) {
-                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}`
-                  }
-                },
-                textStyle: {
-                  fontWeight: 1000, //文字的粗线
-                  fontSize: 15,    //文字的字体大小
-                  color: '#fff'
-                },
-              }
-            },
-            data: [
-              {value: 1048, name: '100公里以下'},
-              {value: 735, name: '100-200公里'},
-              {value: 580, name: '200-500公里'},
-              {value: 484, name: '500-1000公里'},
-              {value: 300, name: '1000-1500公里'},
-              {value: 484, name: '超过1500公里'},
-            ],
-          }
-        ]
-      }
-      ,
-      totals: {
-        企业总数: '000003',
-        车辆总数: '000200',
-        运营商总数: '000001',
-
-      },
+      ],
       button_id: ['今日报警分布', '驾驶异常分布'],
       name: '车辆报警分布',
       travel: [
@@ -659,10 +603,15 @@ export default {
         offline: 46,
       },
       access_token: '',
-      refresh_token: ''
+      refresh_token: '',
+      titlename: '',
+      alarm: {}
     }
   },
   mounted() {
+    this.config()
+    // this.Group()
+    // this.warnGroup()
     this.getmounted()
   },
   filters: {
@@ -677,6 +626,12 @@ export default {
     },
   },
   methods: {
+    che(res) {
+      console.log(res)
+      axios.get('http://222.75.204.3:8081/report/dashboard/statistics/orgOnlineVehicleAndAlarm', {
+        headers: {}
+      })
+    },
     iconColor() {
       // this.iconStyle = []
       for (let i = 0; i < this.tableData.length; i++) {
@@ -710,7 +665,6 @@ export default {
       this.getEchartvehicle()
       this.autoscroll()
       this.iconColor()
-      this.config()
     },
     getEchartData() {
       const myChart = this.$echarts.init(document.getElementById('chart'));
@@ -756,37 +710,110 @@ export default {
         myChart.resize()
       })
     },
-    getEchartvehicle() {
+    getEchartvehicle(res) {
       let myChart = this.$echarts.init(document.getElementById('yesterday-mileage'));
-      myChart.setOption(this.vehicle_running);
+      var option = {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : 有{c}辆 '
+        },
+        series: [
+          {
+            name: '昨日里程',
+            type: 'pie',
+            radius: '100%',
+            label: { //饼图图形上的文本标签
+              normal: {
+                formatter(v) {
+                  let text = v.name
+                  if (text.length <= 3) {
+                    return text;
+                  } else if (text.length > 3 && text.length <= 8) {
+                    return text = `${text.slice(0, 3)}\n${text.slice(3)}`
+                  } else if (text.length > 8 && text.length <= 16) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8)}`
+                  } else if (text.length > 16 && text.length <= 24) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16)}`
+                  } else if (text.length > 24 && text.length <= 30) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24)}`
+                  } else if (text.length > 30) {
+                    return text = `${text.slice(0, 8)}\n${text.slice(8, 16)}\n${text.slice(16, 24)}\n${text.slice(24, 30)}\n${text.slice(30)}`
+                  }
+                },
+                textStyle: {
+                  fontWeight: 1000, //文字的粗线
+                  fontSize: 15,    //文字的字体大小
+                  color: '#fff'
+                },
+              }
+            },
+            data: [
+              {
+                value: res.value[0],
+                name: res.x[0]
+              }, {
+                value: res.value[1],
+                name: res.x[1]
+              }, {
+                value: res.value[2],
+                name: res.x[2]
+              }, {
+                value: res.value[3],
+                name: res.x[3]
+              }, {
+                value: res.value[4],
+                name: res.x[4]
+              }, {
+                value: res.value[5],
+                name: res.x[5]
+              }, {
+                value: res.value[6],
+                name: res.x[6]
+              },
+            ],
+          }
+        ]
+      }
+      myChart.setOption(option);
       window.addEventListener("resize", function () {
         myChart.resize()
       })
     },
     gettotal() {
       let that = this
-      this.$axios.get(
+      var token = localStorage.players
+      axios.get(
           'http://222.75.204.3:8081/basic/dashboard-set/vehicle/count?regionCode=640181',
           {
             headers:
                 {
-                  Authorization: that.access_token
+                  // Authorization: token
+                  Authorization: 'Bearer 1abe7f9f-bde5-4b7a-a5f9-7bd95d08ccf4'
                 }
           }
       ).then(function (res) {
+        that.totals[1].number = res.data.data.total.toString()
         that.totaldata.total = res.data.data.total
         that.totaldata.online = res.data.data.online
         that.totaldata.offline = res.data.data.offline
-        that.totals.车辆总数 = res.data.data.total.toString().splice(6, '0')
-        console.log(that.totals.车辆总数)
       }).catch(function (err) {
+      })
+    },
+    userinfo(token) {
+      let that = this
 
+      axios.get('http://222.75.204.3:8081/basic/user/info', {
+        params: {
+          access_token: token,
+        }
+      }).then(function (res) {
+        that.titlename = res.data.data.sysUser.platformName
       })
     },
     config() {
       let that = this
       let Authorization = 'Basic dGVzdDp0ZXN0'
-      this.$axios.post(
+      axios.post(
           'http://222.75.204.3:8081/auth/oauth/token?username=admin&password=9894%2B9Yxne9Lhe3Hz%2BWvQQ%3D%3D&grant_type=password&scope=server',
           {}, {
             headers:
@@ -795,43 +822,20 @@ export default {
                 }
           }
       ).then(function (res) {
-        console.log(res.data)
         that.access_token = res.data.token_type + ' ' + res.data.access_token
         that.refresh_token = res.data.token_type + ' ' + res.data.refresh_token
+        localStorage.players = res.data.token_type + ' ' + res.data.access_token
+        console.log(res)
         that.gettotal()
+        that.userinfo(res.data.access_token)
+        that.Group()
+        that.warnGroup()
+        that.che(that.access_token)
       }).catch(function (err) {
-        console.log(err, '错误')
+        console.log(err)
       })
+
     },
-    // risk(){
-    //   // let that = this
-    //   // let time = new Date()
-    //   // let startDate = time.getDate().toString().padStart(2,'0')
-    //   // let startMonth = (time.getMonth() + 1).toString().padStart(2,'0')
-    //   // let startYear = time.getFullYear()
-    //   // let content = 'application/json;charset=UTF-8'
-    //   // let startTime = startYear + '-' + startMonth + '-' + startDate +' 00:00:00'
-    //   // let endTime = startYear + '-' + startMonth + '-' + startDate +' 23:59:59'
-    //   //   axios.post('http://222.75.204.3:8081/report/vehicleWarn/risk',
-    //   //       {
-    //   //         current:'1',
-    //   //         size:'1000',
-    //   //         startTime: startTime,
-    //   //         endTime: endTime
-    //   //       },
-    //   //       {
-    //   //         headers:{
-    //   //           'Content-Type':content,
-    //   //           Authorization:that.access_token,
-    //   //         }
-    //   //       }
-    //   //   ).then(function (res){
-    //   //     // for (let i = 0; i < res.data.data.records.length; i++) {
-    //   //     //   if ()
-    //   //     // }
-    //   //     // console.log(res)
-    //   // })
-    // },
     autoscroll() {
       const table = this.$refs.table
       const divData = table.bodyWrapper
@@ -841,6 +845,28 @@ export default {
           divData.scrollTop = 0
         }
       }, 30)
+    },
+    Group() {
+      let that = this
+      axios('http://222.75.204.3:8081/report/chart/driverDsm?warnGroup=2',
+          {
+            methods: "get",
+            headers: {
+              "Authorization": that.access_token
+            }
+          }).then((res) => {
+        this.getEchartvehicle(res.data.data)
+      })
+    },
+    warnGroup() {
+      let that = this
+      axios('http://43.142.179.198:8081/carcount/getList',
+          {
+            methods: "get",
+          }).then((res) => {
+        this.alarm = res.data.data.list
+      })
+
     },
     opens(url) {
       if (url !== undefined) {
@@ -1083,23 +1109,25 @@ export default {
         }
 
         .vehicle-mileage {
-          width: 45%;
+          width: 50%;
           height: 100%;
         }
       }
 
       .kilometre {
-        width: 50%;
         color: white;
         text-align: center;
+        margin-top: -1%;
+        position: relative;
 
         span {
           font-size: 3vh;
         }
 
-        div {
-          line-height: 4vh;
-        }
+        //
+        //div {
+        //  line-height: 3vh;
+        //}
       }
 
 
@@ -1255,5 +1283,9 @@ export default {
 //}
 .icon-huoche {
   color: green;
+}
+
+.ad {
+  color: #1aac19;
 }
 </style>
