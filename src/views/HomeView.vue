@@ -91,12 +91,19 @@
         <div class="mileage">
           <h2 style="text-align: center;color: white;">报警情况</h2>
           <div class="flex around" style="height: 90%">
-            <div class="kilometre" style="display: flex;flex-wrap: wrap;justify-content: end">
-              <div v-for="(item,index) in this.alarm" :key="index"
-                   style="width: 30%;line-height:3.1vh;;margin-left:1%;text-align: center">
-                <div style="background: #00c2fd;">
-                  <div>{{ item.x }}:{{ item.value }}辆</div>
-                </div>
+            <!--            <div class="kilometre" style="display: flex;flex-wrap: wrap;justify-content: end">-->
+            <!--              <div v-for="(item,index) in this.alarm" :key="index"-->
+            <!--                   style="width: 30%;line-height:3.1vh;;margin-left:1%;text-align: center">-->
+            <!--                <div style="background: #00c2fd;">-->
+            <!--                  <div>{{ item.x }}:{{ item.value }}辆</div>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <!--            </div>-->
+            <div class="kilometre">
+              <div v-for="(item,index) in this.travel" :key="index" style="text-align:center">{{ item.title }}安全行驶累计里程
+                <span>{{
+                    item.num
+                  }}</span> 公里
               </div>
             </div>
             <div class="vehicle-mileage">
@@ -108,8 +115,6 @@
           <div class="statistics">
             <div v-for="(item,index) in totaldata">
               <div>{{ index | filtertotal }}：{{ item }}</div>
-              <!--             <div>在线数量：160</div>-->
-              <!--             <div>离线数量：40</div>-->
             </div>
           </div>
           <div class="amap-example">
@@ -127,6 +132,7 @@
                     auto-move
                     is-custom
                 >
+                  <amap-label-marker/>
                   <el-popover
                       placement="right"
                       width="400"
@@ -569,13 +575,13 @@ export default {
       totals: [
         {
           name: '企业总数',
-          number: '19'
+          number: '38'
         }, {
           name: '车辆总数',
           number: '19'
         }, {
           name: '运营商总数',
-          number: '1'
+          number: '3'
         },
       ],
       button_id: ['今日报警分布', '驾驶异常分布'],
@@ -626,12 +632,6 @@ export default {
     },
   },
   methods: {
-    che(res) {
-      console.log(res)
-      axios.get('http://222.75.204.3:8081/report/dashboard/statistics/orgOnlineVehicleAndAlarm', {
-        headers: {}
-      })
-    },
     iconColor() {
       // this.iconStyle = []
       for (let i = 0; i < this.tableData.length; i++) {
@@ -788,7 +788,7 @@ export default {
             headers:
                 {
                   // Authorization: token
-                  Authorization: 'Bearer 1abe7f9f-bde5-4b7a-a5f9-7bd95d08ccf4'
+                  Authorization: token
                 }
           }
       ).then(function (res) {
@@ -830,7 +830,6 @@ export default {
         that.userinfo(res.data.access_token)
         that.Group()
         that.warnGroup()
-        that.che(that.access_token)
       }).catch(function (err) {
         console.log(err)
       })
@@ -848,11 +847,12 @@ export default {
     },
     Group() {
       let that = this
+      var token = localStorage.players
       axios('http://222.75.204.3:8081/report/chart/driverDsm?warnGroup=2',
           {
             methods: "get",
             headers: {
-              "Authorization": that.access_token
+              Authorization: token
             }
           }).then((res) => {
         this.getEchartvehicle(res.data.data)
