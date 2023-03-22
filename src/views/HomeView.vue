@@ -88,117 +88,45 @@
       </div>
       <!--  地图  -->
       <div class="analysis">
-        <div class="mileage">
-          <h2 style="text-align: center;color: white;">报警情况</h2>
-          <div class="flex around" style="height: 90%">
-            <!--            <div class="kilometre" style="display: flex;flex-wrap: wrap;justify-content: end">-->
-            <!--              <div v-for="(item,index) in this.alarm" :key="index"-->
-            <!--                   style="width: 30%;line-height:3.1vh;;margin-left:1%;text-align: center">-->
-            <!--                <div style="background: #00c2fd;">-->
-            <!--                  <div>{{ item.x }}:{{ item.value }}辆</div>-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
-            <div class="kilometre">
-              <div v-for="(item,index) in this.travel" :key="index" style="text-align:center">{{ item.title }}安全行驶累计里程
-                <span>{{
-                    item.num
-                  }}</span> 公里
-              </div>
-            </div>
-            <div class="vehicle-mileage">
-              <div style="width: 100%;height: 80%;" id="yesterday-mileage"></div>
-            </div>
-          </div>
-        </div>
         <div class="map">
-          <div class="statistics">
-            <div v-for="(item,index) in totaldata">
-              <div>{{ index | filtertotal }}：{{ item }}</div>
-            </div>
-          </div>
-          <div class="amap-example">
-            <amap
-                id="AmapMar"
-                ref="centerMap"
-                :center="this.marker"
-            >
-              <!--              <amap-map-type/>-->
-              <!--              <amap-district-layer-province />-->
-              <div v-for="(item,index) in tableData">
-                <amap-marker
-                    :key="index"
-                    :position="item.marker"
-                    auto-move
-                    is-custom
-                >
-                  <amap-label-marker/>
-                  <el-popover
-                      placement="right"
-                      width="400"
-                      trigger="click"
-                  >
-                    <table style="width: 100%;text-align: center;" cellspacing="0" border="1">
-                      <tr>
-                        <th>司机姓名</th>
-                        <th>车牌号</th>
-                        <th>归属地</th>
-                        <th>所属业户</th>
-                        <th>货物种类</th>
-                        <th>货物名称</th>
-                        <th>货物吨数</th>
-                      </tr>
-                      <tr>
-                        <td >{{ item.name }}</td>
-                        <td>{{ item.date }}</td>
-                        <td>{{ item.address }}</td>
-                        <td>{{ item.Belonging }}</td>
-                        <td>{{ item.type }}</td>
-                        <td>{{ item.description }}</td>
-                        <td>{{ item.tonnage }}</td>
-                      </tr>
-                    </table>
-                    <div slot="reference" class="icon iconfont" style="color: red" v-html="iconStyle[index]">
-                    </div>
-                  </el-popover>
-                </amap-marker>
-              </div>
-
-            </amap>
-            <!--            <about />-->
-          </div>
-          <div class="vehicle">
-            <div>
-              <el-button>
-                危货车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                普货车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                公铁联运
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                大宗贸易
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                客运车
-              </el-button>
-            </div>
-            <div>
-              <el-button>
-                汇总
-              </el-button>
-            </div>
-          </div>
+          <about></about>
+          <!--          <div class="statistics">-->
+          <!--            <div v-for="(item,index) in totaldata">-->
+          <!--              <div>{{ index | filtertotal }}：{{ item }}</div>-->
+          <!--            </div>-->
+          <!--          </div>-->
+          <!--          <div class="vehicle">-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                危货车-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                普货车-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                公铁联运-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                大宗贸易-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                客运车-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--            <div>-->
+          <!--              <el-button>-->
+          <!--                汇总-->
+          <!--              </el-button>-->
+          <!--            </div>-->
+          <!--          </div>-->
         </div>
         <div class="roll">
           <el-table
@@ -1133,10 +1061,10 @@ export default {
 
       .map {
         width: 100%;
-        height: 42%;
-        background: url(../img/amap.png) no-repeat;
+        height: 64%;
+        //background: url(../img/amap.png) no-repeat;
         background-size: 99% 100%;
-        margin-bottom: 1%;
+        margin-bottom: 6%;
         position: relative;
 
         .amap-example {
