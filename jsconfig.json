@@ -1,20 +1,41 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "module": "esnext",
-    "baseUrl": "./",
+    "strict": true,
+    "noImplicitReturns": true,
     "jsx": "preserve",
     "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictFunctionTypes": false,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "types": [
+      "node"
+    ],
     "paths": {
       "@/*": [
         "src/*"
+      ],
+      "*": [
+        "node_modules/*"
+      ],
+      "echarts": [
+        "types/echarts"
+      ],
+      "wangeditor": [
+        "types/wangEditor"
       ]
-    },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
-  }
+    }
+  },
+  "include": [
+    "src/**/*",
+    "src/**/*.vue"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/assets/"
+  ]
 }
