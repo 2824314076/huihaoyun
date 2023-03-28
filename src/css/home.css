@@ -1,0 +1,18 @@
+.el-popper {
+    background: #314085;
+    border: 1px solid #314085;
+}
+
+.el-dropdown-menu__item {
+    color: #fff;
+}
+
+.popper__arrow::after {
+    border-bottom-color: #314085 !important;
+    border-top-color: #314085 !important;
+}
+
+.el-dropdown-menu__item:not(.is-disabled):hover {
+    background: #0bb5b2 !important;
+    color: #fff;
+}

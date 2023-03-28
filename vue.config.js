@@ -3,7 +3,7 @@ module.exports = ({
     assetsDir: 'assets',
     parallel: false,
     publicPath: process.env.NODE_ENV === "development" ? '/' : './',
-    outputDir: 'transportation',
+    outputDir: 'transportations',
     devServer: {
         port: 8082,
         host: '0.0.0.0',
