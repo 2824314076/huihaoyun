@@ -37,16 +37,36 @@
     <div class="head">
       <div class="left">
         <el-button class="button" @click="opens('http://222.75.204.3:8081/#/login')">管理平台</el-button>
-        <el-button class="button" @click="opens('http://222.75.204.17:12503/webgis/login.jsp')">危货运输</el-button>
-        <el-button class="button" @click="opens('https://pc.huihaoyun.cn/login.html?v=1324/')">普货运输</el-button>
+        <!--        <el-button class="button" @click="opens('http://222.75.204.17:12503/webgis/login.jsp')">危货运输<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i></el-button>-->
+        <el-dropdown
+            class="button">
+          <div style="line-height:4vh;font-size: 1.5vh">宁东各局<i class="el-icon-arrow-down el-icon--right"></i></div>
+          <el-dropdown-menu slot="dropdown" class="dropdownMenu">
+            <el-dropdown-item v-for="(item,index) in bureaus" :key="index" @click.native="opens(item.url)">{{
+                item.lable
+              }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-dropdown
+            class="button">
+          <div style="line-height: 4vh;font-size: 1.5vh">综合运输<i class="el-icon-arrow-down el-icon--right"></i></div>
+          <el-dropdown-menu slot="dropdown" class="dropdownMenus">
+            <el-dropdown-item v-for="(item,index) in goods" :key="index" @click.native="opens(item.url)">{{
+                item.lable
+              }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <!--        <el-button class="button" @click="opens('https://pc.huihaoyun.cn/login.html?v=1324/')">普货运输</el-button>-->
       </div>
       <div>
         <h1>{{ this.titlename }}</h1>
       </div>
       <div class="right">
-        <el-button class="button" @click="opens()">公铁联运</el-button>
         <el-button class="button" @click="opens()">大宗贸易</el-button>
         <el-button class="button" @click="opens()">第三方服务</el-button>
+        <el-button class="button" @click="opens('http://43.142.179.198/logisticsbigdataplatform/index.html#/')">退出</el-button>
       </div>
     </div>
     <div class="summary">
@@ -81,7 +101,7 @@
         </div>
         <div class="police">
           <div>
-            <div class="font">{{ this.name }}</div>
+            <div class="font" style="margin-left: 5%">{{ this.name }}</div>
           </div>
           <div id="chart1"></div>
         </div>
@@ -90,82 +110,47 @@
       <div class="analysis">
         <div class="map">
           <about></about>
-          <!--          <div class="statistics">-->
-          <!--            <div v-for="(item,index) in totaldata">-->
-          <!--              <div>{{ index | filtertotal }}：{{ item }}</div>-->
-          <!--            </div>-->
-          <!--          </div>-->
-          <!--          <div class="vehicle">-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                危货车-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                普货车-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                公铁联运-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                大宗贸易-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                客运车-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--            <div>-->
-          <!--              <el-button>-->
-          <!--                汇总-->
-          <!--              </el-button>-->
-          <!--            </div>-->
-          <!--          </div>-->
         </div>
         <div class="roll">
           <el-table
-              :data="tableData"
+              :data="tabledata"
               height="99%"
               ref="table"
               @row-click="Tablemap"
+              @cell-mouse-enter="mouseEnter"
+              @cell-mouse-leave="mouseLeave"
               :header-cell-style="{
-                background: '#00065CFF',
-                color: '#fff',
-                }"
+                          background: '#00065CFF',
+                          color: '#fff',
+                          }"
           >
             <el-table-column
                 prop="name"
-                label="司机姓名">
+                label="司 机 姓 名">
             </el-table-column>
             <el-table-column
                 prop="date"
-                label="车牌号">
+                label="车 牌 号">
             </el-table-column>
             <el-table-column
                 prop="address"
-                label="归属地">
+                label="归 属 地">
             </el-table-column>
             <el-table-column
                 prop="Belonging"
-                label="所属业户">
+                label="所 属 业 户">
             </el-table-column>
             <el-table-column
                 prop="type"
-                label="货物种类">
+                label="货 物 种 类">
             </el-table-column>
             <el-table-column
                 prop="description"
-                label="货物名称">
+                label="货 物 名 称">
             </el-table-column>
             <el-table-column
                 prop="tonnage"
-                label="货物吨数">
+                label="货 物 吨 数">
             </el-table-column>
           </el-table>
         </div>
@@ -177,39 +162,39 @@
             <div class="active-safety">
               <div class="align">
                 <div class="line"><span class="icon iconfont icon-anquan"></span></div>
-                <div class="margin">88</div>
+                <div class="margin">564</div>
               </div>
               <div class="align">主动安全车辆数</div>
             </div>
             <div class="police">
               <div class="align">
                 <div class="line"><span class="icon iconfont icon-zuoyebaojing-copy"></span></div>
-                <div>2</div>
+                <div>262</div>
               </div>
               <div class="align">今日报警数</div>
             </div>
           </div>
           <div class="flex around align intelligence">
             <div>
-              <div class="high-risk">28</div>
+              <div class="high-risk">60</div>
               <div>高风险</div>
             </div>
             <div>
-              <div class="medium-risk">8</div>
+              <div class="medium-risk">153</div>
               <div>中风险</div>
             </div>
             <div>
-              <div class="low-risk">38</div>
+              <div class="low-risk">124</div>
               <div>低风险</div>
             </div>
           </div>
         </div>
         <div class="suspected-faulty-vehicle">
-          <div class="left">驾驶员异常报警分布</div>
+          <div class="left" style="margin-left: 5%;font-weight: bolder;">驾驶员异常报警分布</div>
           <div id="suspected-fault"></div>
         </div>
         <div class="risk">
-          <div class="left">当月疫情风险趋势</div>
+          <div class="left" style="margin-left: 5%;font-weight: bolder;">当月疫情风险趋势</div>
           <div id="risk-trend"></div>
         </div>
       </div>
@@ -220,7 +205,8 @@
 <script>
 import "../css/font/iconfont.css"
 import axios from "axios"
-import about from "@/views/AboutView"
+import about from "@/views/idnex"
+import "@/css/home.css"
 
 export default {
   name: 'HomeView',
@@ -229,77 +215,104 @@ export default {
   },
   data() {
     return {
-      tableData: [{
-        marker:[106, 38],
-        date: '宁AK2600',
-        name: '秦放',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司',
-        goods:'危货',
-        type: '腐蚀品',
-        description: '五氧化二磷',
-        tonnage: '10吨'
-      }, {
-        marker:[106.7821, 38.1919],
-        date: '宁AG8205',
-        name: '罗致',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司',
-        type: '第七类',
-        goods:'危货',
-        description: '海洋污染物',
-        tonnage: '13吨'
-      }, {
-        marker:[106.567, 38.192],
-        date: '宁AB9991',
-        name: '王鑫',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏孚惠工贸有限公司',
-        goods:'危货',
-        type: '爆炸品',
-        description: '液态二氧化碳',
-        tonnage: '8吨'
-      }, {
-        marker:[107.567821, 32.192319],
-        date: '宁AL0897',
-        name: '张猛',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司',
-        goods:'危货',
-        type: '易燃物',
-        description: '甲烷',
-        tonnage: '20吨'
-      }, {
-        marker:[110, 38.192319],
-        date: '宁AM9098',
-        name: '褚宇',
-        address: '宁夏回族自治区',
-        Belonging: '	宁夏孚惠工贸有限公司',
-        goods:'危货',
-        type: '放射线物',
-        description: '二氧化镅',
-        tonnage: '26吨'
-      }, {
-        marker:[100, 30],
-        date: '宁AJ8338',
-        name: '李兴浩',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司',
-        goods:'危货',
-        type: '氧化剂',
-        description: '氯酸钾',
-        tonnage: '30吨'
-      }, {
-        marker:[92, 40],
-        date: '宁AL0875',
-        name: '张浩',
-        address: '宁夏回族自治区',
-        Belonging: '宁夏众鑫运输有限公司',
-        type: '毒害品',
-        goods:'危货',
-        description: '甲醇',
-        tonnage: '27吨'
-      }
+      timeId: null,
+      bureaus: [
+        {
+          url: "http://sztoosun.com:8205/#/home",
+          lable: "建设和交通局"
+        },
+        {
+          lable: "科技和信息化局"
+        }
+      ],
+      goods: [
+        {
+          url: "http://222.75.204.17:12503/webgis/login.jsp",
+          lable: "危货运输"
+        },
+        {
+          lable: "普货运输"
+        },
+        {
+          lable: "公铁联运"
+        },
+        {
+          lable: "客运运输"
+        },
+      ],
+
+      tabledata: [
+        {
+          marker: [106.7821, 38.1919],
+          date: '宁AK2600',
+          name: '秦放',
+          address: '宁夏',
+          Belonging: '众鑫运输',
+          goods: '危货',
+          type: '腐蚀品',
+          description: '五氧化二磷',
+          tonnage: '10吨'
+        }, {
+          marker: [106.7821, 38.1919],
+          date: '宁AG8205',
+          name: '罗致',
+          address: '宁夏',
+          Belonging: '众鑫运输',
+          type: '第七类',
+          goods: '危货',
+          description: '海洋污染物',
+          tonnage: '13吨'
+        }, {
+          marker: [106.567, 38.192],
+          date: '宁AB9991',
+          name: '王鑫',
+          address: '宁夏',
+          Belonging: '孚惠工贸',
+          goods: '危货',
+          type: '爆炸品',
+          description: '液态二氧化碳',
+          tonnage: '8吨'
+        }, {
+          marker: [107.567821, 32.192319],
+          date: '宁AL0897',
+          name: '张猛',
+          address: '宁夏',
+          Belonging: '众鑫运输',
+          goods: '危货',
+          type: '易燃物',
+          description: '甲烷',
+          tonnage: '20吨'
+        }, {
+          marker: [110, 38.192319],
+          date: '宁AM9098',
+          name: '褚宇',
+          address: '宁夏',
+          Belonging: '	孚惠工贸',
+          goods: '危货',
+          type: '放射线物',
+          description: '二氧化镅',
+          tonnage: '26吨'
+        }, {
+          marker: [100, 30],
+          date: '宁AJ8338',
+          name: '李兴浩',
+          address: '宁夏',
+          Belonging: '众鑫运输',
+          goods: '危货',
+          type: '氧化剂',
+          description: '氯酸钾',
+          tonnage: '30吨'
+        }, {
+          marker: [92, 40],
+          date: '宁AL0875',
+          name: '张浩',
+          address: '宁夏',
+          Belonging: '众鑫运输',
+          type: '毒害品',
+          goods: '危货',
+          description: '甲醇',
+          tonnage: '27吨'
+        }
       ],
       title: '',
       newList: [], // 数据
@@ -331,8 +344,8 @@ export default {
               show: false
             },
             data: [
-              {value: 157, name: '今日在线'},
-              {value: 33, name: '今日离线'},
+              {value: 934, name: '今日在线'},
+              {value: 574, name: '今日离线'},
               {value: 14, name: '3日离线'},
               {value: 8, name: '7日离线'},
               {value: 0, name: '30日以上'}
@@ -362,7 +375,7 @@ export default {
           type: 'value'
         },
         grid: {
-          left: '15%'
+          x: 50, y: 25, x2: 30, y2: 35
         },
         textStyle: {
           color: '#fff'
@@ -429,7 +442,7 @@ export default {
           color: "#fff"
         },
         grid: {
-          left: '3%',
+          left: '4%',
           right: '4%',
           bottom: '3%',
           containLabel: true
@@ -509,10 +522,9 @@ export default {
           number: '19'
         }, {
           name: '运营商总数',
-          number: '3'
+          number: '4'
         },
       ],
-      button_id: ['今日报警分布', '驾驶异常分布'],
       name: '车辆报警分布',
       travel: [
         {
@@ -546,6 +558,7 @@ export default {
     this.config()
     // this.Group()
     // this.warnGroup()
+    this.autoscroll()
     this.getmounted()
   },
   filters: {
@@ -753,25 +766,29 @@ export default {
         that.access_token = res.data.token_type + ' ' + res.data.access_token
         that.refresh_token = res.data.token_type + ' ' + res.data.refresh_token
         localStorage.players = res.data.token_type + ' ' + res.data.access_token
-        console.log(res)
         that.gettotal()
         that.userinfo(res.data.access_token)
         that.Group()
         that.warnGroup()
       }).catch(function (err) {
-        console.log(err)
       })
 
     },
     autoscroll() {
       const table = this.$refs.table
-      const divData = table.bodyWrapper
-      setInterval(() => {
-        divData.scrollTop += 1
-        if (divData.clientHeight + divData.scrollTop === divData.scrollHeight || divData.clientHeight + divData.scrollTop === divData.scrollHeight - 1) {
-          divData.scrollTop = 0
+      const divData = table.bodyWrapper;
+      this.timeId = setInterval(() => {
+        divData.scrollTop += 1;
+        if (divData.clientHeight + divData.scrollTop == divData.scrollHeight) {
+          divData.scrollTop = 0;
         }
-      }, 30)
+      }, 30);
+    },
+    mouseEnter() {
+      clearInterval(this.timeId)
+    },
+    mouseLeave() {
+      this.autoscroll()
     },
     Group() {
       let that = this
@@ -831,7 +848,6 @@ export default {
     margin-bottom: 2%;
     position: relative;
 
-
     .left {
       width: 25%;
       display: flex;
@@ -852,7 +868,7 @@ export default {
       margin-right: 5%;
     }
 
-    .el-button {
+    .button {
       width: 25%;
       color: white;
       background: #00065b url(../img/bnt.png) no-repeat;
@@ -975,6 +991,7 @@ export default {
         #chart1 {
           width: 100%;
           height: 95%;
+          margin: 3%;
         }
       }
 
@@ -985,10 +1002,11 @@ export default {
       height: 100%;
 
       .roll {
-        height: 22%;
+        height: 18%;
         overflow: hidden;
         background: url("../img/roll.png") no-repeat;
         background-size: 99% 100%;
+        //margin-top:-3%;
 
 
         ::v-deep .el-table {
@@ -1061,11 +1079,14 @@ export default {
 
       .map {
         width: 100%;
-        height: 64%;
-        //background: url(../img/amap.png) no-repeat;
-        background-size: 99% 100%;
-        margin-bottom: 6%;
+        height: 66%;
+        background: url(../img/amap.png) no-repeat;
+        background-size: 97% 100%;
+        margin-bottom: 1%;
         position: relative;
+        //margin-top: -1%;
+        padding: 1%;
+
 
         .amap-example {
           width: 93%;
@@ -1098,6 +1119,7 @@ export default {
             border: 0;
             color: #00c2fd;
             background: url(../img/bnt.png) no-repeat;
+            background-size: 100% 100%;
           }
         }
       }
@@ -1136,7 +1158,7 @@ export default {
         }
 
         .intelligence {
-          margin-top: 3%;
+          margin-top: 1%;
 
           .high-risk {
             color: red;
@@ -1163,7 +1185,7 @@ export default {
 
         #suspected-fault {
           width: 100%;
-          height: 100%;
+          height: 85%;
         }
       }
 
@@ -1202,10 +1224,6 @@ export default {
 //  line-height: 30px;
 //}
 
-.left {
-  margin-left: 8%;
-}
-
 //.margin{
 //  margin-top: -10px;
 //}
@@ -1215,5 +1233,13 @@ export default {
 
 .ad {
   color: #1aac19;
+}
+
+::v-deep.row {
+  background: transparent;
+
+  row-item {
+    background: transparent;
+  }
 }
 </style>
